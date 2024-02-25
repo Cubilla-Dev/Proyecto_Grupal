@@ -5,6 +5,9 @@ import { styled } from '@mui/material/styles';
 import AppBarComponent from '../components/AppBar';
 import AccountBalanceOutlinedIcon from '@mui/icons-material/AccountBalanceOutlined';
 import CssBaseline from '@mui/material/CssBaseline';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+
+
 
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
@@ -44,7 +47,14 @@ const Home = ({ handleDrawerClose }) => {
         setOpen(false);
         handleDrawerClose;
     };
-
+    const data = [
+        { name: 'Enero', ingresos: 4000, egresos: 2000 },
+        { name: 'Febrero', ingresos: 3000, egresos: 1500 },
+        { name: 'Marzo', ingresos: 5000, egresos: 3000 },
+        { name: 'Abril', ingresos: 4500, egresos: 2800 },
+        { name: 'Mayo', ingresos: 6000, egresos: 3500 },
+        { name: 'Junio', ingresos: 5500, egresos: 3200 },
+    ];
     return (
         <Box>
             <CssBaseline />
@@ -149,14 +159,20 @@ const Home = ({ handleDrawerClose }) => {
                             </Stack>
                         </Stack>
                     </Stack >
-
-                    <Stack
-                        component={Paper}
-                        width="30%"
-                        borderRadius="30px"
-                    >
+                    <Stack component={Paper} width="30%" borderRadius="30px">
                         <h1>Gráficos</h1>
-                    </Stack >
+                        <ResponsiveContainer width="100%" height={300}>
+                            <LineChart data={data}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="name" />
+                                <YAxis />
+                                <Tooltip />
+                                <Legend />
+                                <Line type="monotone" dataKey="ingresos" stroke="#8884d8" />
+                                <Line type="monotone" dataKey="egresos" stroke="#82ca9d" />
+                            </LineChart>
+                        </ResponsiveContainer>
+                    </Stack>
                 </Stack>
             </Main>
         </Box>

@@ -123,20 +123,22 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
                         <ListItem
                             sx={{ width: "250px" }}
                             key={text}
-
                             onMouseOver={(e) => e.currentTarget.style.color = 'whitesmoke'}
                             onMouseOut={(e) => e.currentTarget.style.color = '#6e7a9a'}
                         >
                             <ListItemButton
+                                component="a"
+                                href={index === 0 ? "/dashboardPage" : index === 1 ? "/earningPage" : "/paymentsPage"}
                                 onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'rgb(66 130 108)'}
                                 onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#ffffff'}
                             >
                                 <ListItemIcon>
-                                    {index === 0 ? <Link href="/dashboardPage" > <HomeOutlinedIcon /></Link> : index === 1 ? <Link href="/earningPage"><CurrencyExchangeOutlinedIcon /></Link> : <Link href="/paymentsPage"> <PaymentsOutlinedIcon /></Link>}
+                                    {index === 0 ? <HomeOutlinedIcon /> : index === 1 ? <CurrencyExchangeOutlinedIcon /> : <PaymentsOutlinedIcon />}
                                 </ListItemIcon>
                                 <ListItemText primary={text} />
                             </ListItemButton>
                         </ListItem>
+
                     ))}
                 </List>
                 <List sx={{ display: "flex", justifyContent: "center" }}>
