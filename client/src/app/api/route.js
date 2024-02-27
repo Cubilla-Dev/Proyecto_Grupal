@@ -125,3 +125,31 @@ export function getUsers() {
 //         }
 //     });
 // }
+
+//ADMINISTRADOR
+
+export function registerAdmin(data) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_API_DOMAIN}/admin/register`, data, { withCredentials: true });
+            const result = await response.data;
+            resolve(result);
+        } catch (error) {
+            console.log(error);
+            reject(error);
+        }
+    });
+}
+
+export function loginAdmin(data) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_API_DOMAIN}/admin/login`, data, { withCredentials: true });
+            const result = await response.data;
+            resolve(result);
+        } catch (error) {
+            console.log(error);
+            reject(error);
+        }  
+    });
+}

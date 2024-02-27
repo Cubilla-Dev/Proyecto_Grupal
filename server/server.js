@@ -22,7 +22,8 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static('public'));
 
-
+const adminRoutes = require('./routes/admin.routes'); 
+app.use("/api/admin", adminRoutes); 
 
 const sessionRoutes = require('./routes/session.routes');
 app.use("/api/session", sessionRoutes);
