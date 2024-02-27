@@ -119,7 +119,7 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
                     </IconButton>
                 </DrawerHeader>
                 <List sx={{ color: "#6e7a9a", display: "flex", flexDirection: "column", alignItems: "center", mt: "40px" }}>
-                    {['Dashboard', 'Earning', 'Payments'].map((text, index) => (
+                    {['Dashboard', 'Movements', 'Payments'].map((text, index) => (
                         <ListItem
                             sx={{ width: "250px" }}
                             key={text}
@@ -128,7 +128,7 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
                         >
                             <ListItemButton
                                 component="a"
-                                href={index === 0 ? "/dashboardPage" : index === 1 ? "/earningPage" : "/paymentsPage"}
+                                href={index === 0 ? "/dashboardPage" : index === 1 ? "/movementsPage" : "/paymentsPage"}
                                 onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'rgb(66 130 108)'}
                                 onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#ffffff'}
                             >

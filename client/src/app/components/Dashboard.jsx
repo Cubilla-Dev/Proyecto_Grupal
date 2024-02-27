@@ -159,7 +159,14 @@ const Home = ({ handleDrawerClose }) => {
                             </Stack>
                         </Stack>
                     </Stack >
-                    <Stack component={Paper} width="30%" borderRadius="30px">
+                    <Stack
+                        component={Paper}
+                        width="30%"
+                        borderRadius="30px"
+                        alignItems="center"
+                        p="0 30px"
+                        rowGap="50px"
+                    >
                         <h1>Gráficos</h1>
                         <ResponsiveContainer width="100%" height={300}>
                             <LineChart data={data}>
