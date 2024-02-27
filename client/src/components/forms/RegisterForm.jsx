@@ -78,22 +78,24 @@ const RegisterForm = () => {
                                     fullWidth
                                     id="firstName"
                                     label="First Name"
-                                    error={Boolean(errors.firstName)}
-                                    helperText={errors.firstName?.message}
+                                    error={Boolean(errors && errors.firstName)}
+                                    helperText={errors && errors.firstName ? errors.firstName.message : ''}
                                     autoFocus
                                 />
+
                             </Grid>
                             <Grid item xs={12} sm={6}>
                                 <TextField
-                                    required
-                                    fullWidth
-                                    id="lastName"
-                                    label="Last Name"
-                                    name="lastName"
-                                    autoComplete="family-name"
-                                    error={Boolean(errors.lastName)}
-                                    helperText={errors.lastName?.message}
-                                />
+    required
+    fullWidth
+    id="lastName"
+    label="Last Name"
+    name="lastName"
+    autoComplete="family-name"
+    error={Boolean(errors && errors.lastName)}
+    helperText={errors && errors.lastName ? errors.lastName.message : ''}
+/>
+
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField

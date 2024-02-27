@@ -1,12 +1,11 @@
 'use client'
-import { Fragment, useEffect, useState } from 'react';
+import { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -15,27 +14,15 @@ import Container from '@mui/material/Container';
 import Link from 'next/link';
 import { login } from '@/app/api/route';
 import { useCookies } from 'next-client-cookies';
-// import { useAppDispatch } from '@/lib/hooks';
-// import { setUser, userLogin } from '@/lib/features/users/userSlice';
 import { useRouter } from 'next/navigation';
 import { Paper } from '@mui/material';
-
-
-/*  TODO:
-*   -Redirect on login ok
-*   -Handle Remember
-*/
-
-
 
 
 const LoginForm = () => {
 
     const [errors, setErrors] = useState({});
     const cookies = useCookies();
-    // const dispatch = useAppDispatch();  TODO : LOS marcados en esta página son de redux 
     const router = useRouter();
-
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -48,10 +35,7 @@ const LoginForm = () => {
             const result = await login(data);
             cookies.set("userToken", result.token);
             console.log(result);
-            dispatch(userLogin());
-            dispatch(setUser(result.user));
             router.push("/");
-
         } catch (error) {
             console.log(error);
             setErrors(error.response?.data?.errors);
@@ -86,7 +70,7 @@ const LoginForm = () => {
                             name="email"
                             autoComplete="email"
                             autoFocus
-                            error={Boolean(errors.email)}
+                            error={Boolean(errors && errors.email)}
                             helperText={errors.email?.message}
                         />
                         <TextField
@@ -131,7 +115,6 @@ const LoginForm = () => {
             </Container>
         </Box>
     );
-
 }
 
 export default LoginForm;
