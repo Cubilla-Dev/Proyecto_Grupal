@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import PasswordResetForm from "@/app/components/forms/PasswordResetForm";
+import PasswordResetForm from "@/components/forms/PasswordResetForm";
 
 
 const PasswordResetPage = () => {

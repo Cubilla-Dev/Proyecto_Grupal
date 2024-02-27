@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Box, Paper, Stack } from "@mui/material";
 import { styled } from '@mui/material/styles';
-import AppBarComponent from '../components/AppBar';
+import AppBarComponent from '../AppBar';
 import CssBaseline from '@mui/material/CssBaseline';
 
 
@@ -19,7 +19,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({
     marginLeft: open ? 260 : `-${0}px`
 }))
 
-const EarningPage = ({ handleDrawerClose }) => {
+const PaymentsPage = ({ handleDrawerClose }) => {
 
     const [open, setOpen] = useState(false);
 
@@ -51,11 +51,11 @@ const EarningPage = ({ handleDrawerClose }) => {
                     borderRadius="30px"
                     alignItems="center"
                 >
-                    <h1>Ultimos Movimientos</h1>
+                    <h1>Historial de Pagos</h1>
                 </Stack>
             </Main>
         </Box>
     )
 }
 
-export default EarningPage;
+export default PaymentsPage;
