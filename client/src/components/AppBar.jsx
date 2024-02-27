@@ -70,6 +70,9 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
                     <Typography variant="h6" noWrap component="div">
                         <img height="70px" src="/virtualwallet.png" alt="logo" />
                     </Typography>
+                    <Typography variant="h6" noWrap component="div">
+                        LOGOUT
+                    </Typography>
                 </Toolbar>
             </AppBar>
             <Drawer
