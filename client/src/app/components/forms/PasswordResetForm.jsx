@@ -7,8 +7,8 @@ import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Container, CssBaseline, TextField } from "@mui/material";
-// import { passwordReset, passwordResetToken } from "@/app/api/route";
-// import { MuiOtpInput } from "mui-one-time-password-input";
+import { passwordReset, passwordResetToken } from "@/app/api/route";
+import { MuiOtpInput } from "mui-one-time-password-input";
 import { useRouter } from "next/navigation";
 
 
