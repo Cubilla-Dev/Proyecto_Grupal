@@ -43,6 +43,8 @@ const LoginForm = () => {
         try {
             const result = await login(data);
             cookies.set("userToken", result.token);
+            cookies.set("info", result.user._id)
+            console.log(result.user._id);
             console.log(result);
             dispatch(userLogin());
             dispatch(setUser(result.user));
@@ -53,7 +55,7 @@ const LoginForm = () => {
                 iconColor: "#42826c"
             });
             setTimeout(() => {
-                router.push("/");
+               router.push("/");
             }, 1500);
 
         } catch (error) {

@@ -27,30 +27,31 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useState } from 'react';
-import Swal from 'sweetalert2'
 import SendMoneyForm from './modals/sendMoneyInterception';
+import ChargeWalletForm from './modals/chargeWallet';
+
 
 const drawerWidth = 260;
 
 const AppBar = styled(MuiAppBar, {
-    shouldForwardProp: (prop) => prop !== 'open',
+  shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
-    transition: theme.transitions.create(['margin', 'width'], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-    }),
-    ...(open && {
-        width: `calc(100% - ${drawerWidth}px)`,
-        marginLeft: drawerWidth,
-    }),
+  transition: theme.transitions.create(["margin", "width"], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  ...(open && {
+    width: `calc(100% - ${drawerWidth}px)`,
+    marginLeft: drawerWidth,
+  }),
 }));
 
-const DrawerHeader = styled('div')(({ theme }) => ({
-    display: 'flex',
-    alignItems: 'center',
-    padding: theme.spacing(0, 1),
-    ...theme.mixins.toolbar,
-    justifyContent: 'flex-end',
+const DrawerHeader = styled("div")(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  padding: theme.spacing(0, 1),
+  ...theme.mixins.toolbar,
+  justifyContent: "flex-end",
 }));
 
 const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
@@ -59,8 +60,10 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
     const dispatch = useAppDispatch();
     const router = useRouter()
     const [openModal, setOpenModal] = useState(false);
-    const currentUser = useAppSelector(selectUser);
-
+    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen2, setIsOpen2] = useState(false);
+    const [isOpen3, setIsOpen3] = useState(false);
+    const currentUser=useAppSelector(selectUser)
     const handleClickOpen = () => {
         setOpenModal(true);
     };
@@ -72,12 +75,16 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
         router.push(route);
     }
 
-    const handleModal = (aux) => {
-        if (aux === 1) {
-            console.log("enviar dinero");
-        } else {
-            console.log("pagar servicio");
+    const handleModal=(aux)=>{
+        if (aux===1) {
+            //console.log("enviar dinero");
+            //router.push("/sendMoney")
+            setIsOpen(!isOpen);
+        }else if (aux===2) {
+            console.log("pago");
+        }else{
             console.log("cargar");
+            setIsOpen3(!isOpen3);
         }
     }
 
@@ -102,30 +109,37 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
         }
     }
 
-    return (
-        <>
-            <Box sx={{ display: 'flex' }}>
-                <CssBaseline />
-                <AppBar position="fixed" open={open} sx={{
-                    backgroundColor: "rgb(66 130 108)",
-                    boxShadow: "none",
-                    height: "80px"
-
-                }}>
-                    <Toolbar >
-                        <IconButton
-                            color="white"
-                            aria-label="open drawer"
-                            onClick={handleDrawerOpen}
-                            edge="start"
-                            sx={{ mr: 2, ...(open && { display: 'none', }), }}
-                        >
-                            <MenuIcon />
-                        </IconButton>
-                        <Stack direction="row" spacing={130}>
-                            <Typography variant="h6" noWrap component="div">
-                                <img height="70px" src="https://z5vdccfn-8000.brs.devtunnels.ms/images/image-6.png" alt="logo" />
-                            </Typography>
+  return (
+    <>
+      <Box sx={{ display: "flex" }}>
+        <CssBaseline />
+        <AppBar
+          position="fixed"
+          open={open}
+          sx={{
+            backgroundColor: "rgb(66 130 108)",
+            boxShadow: "none",
+            height: "80px",
+          }}
+        >
+          <Toolbar>
+            <IconButton
+              color="white"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              sx={{ mr: 2, ...(open && { display: "none" }) }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Stack direction="row" spacing={130}>
+              <Typography variant="h6" noWrap component="div">
+                <img
+                  height="70px"
+                  src="https://z5vdccfn-8000.brs.devtunnels.ms/images/image-6.png"
+                  alt="logo"
+                />
+              </Typography>
 
                             {
                                 !isLogged ?
@@ -166,7 +180,7 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
                                 rowGap: "25px",
                                 p: "10px 10px",
                                 flexDirection: "column",
-                                borderEndEndRadius: "30px"
+                                borderEndEndRadius:"30px"
                             }}
                         >
                             <img
@@ -177,7 +191,7 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
                                 }}
                             />
                             <Typography variant='h5' sx={{
-                                color: "white"
+                                color:"white"
                             }}>
                                 {currentUser.firstName} {currentUser.lastName}
                             </Typography>
@@ -235,19 +249,47 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title">
-                    {"Qué desea realizar?"}
-                </DialogTitle>
-                <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                        <Button variant='contained' onClick={() => handleModal(1)}>Enviar Dinero</Button>
-                        <Button variant='contained' onClick={() => handleModal(2)}>Pagar Servicios</Button>
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose}>Cerrar</Button>
-                </DialogActions>
-            </Dialog>
+            <DialogTitle id="alert-dialog-title">
+            {"Qué desea realizar?"}
+            </DialogTitle>
+            <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+            <Button
+                variant='contained'
+                onClick={() => handleModal(1)}
+                style={{ backgroundColor: 'rgb(66, 130, 108)', color: '#ffffff' }}
+                >
+                Enviar Dinero
+                </Button>
+
+            <Button
+                variant='contained'
+                onClick={() => handleModal(2)}
+                style={{ backgroundColor: 'rgb(66, 130, 108)', color: '#ffffff' }}
+                >
+                Pagar Servicios
+            </Button>
+            <Button
+                variant='contained'
+                onClick={() => handleModal(3)}
+                style={{ backgroundColor: 'rgb(66, 130, 108)', color: '#ffffff' }}
+                >
+                Cargar Billetera
+            </Button>
+            </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+            <Button onClick={handleClose} color='error'>Cerrar</Button>
+            </DialogActions>
+        </Dialog>
+        <SendMoneyForm
+        isDialogOpened={isOpen}
+        handleCloseDialog={() => setIsOpen(false)}
+      />
+      <ChargeWalletForm
+        isDialogOpened={isOpen3}
+        handleCloseDialog={() => setIsOpen3(false)}
+      />
         </>
     );
 }

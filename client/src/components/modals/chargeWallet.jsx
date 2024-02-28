@@ -9,9 +9,9 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useRouter } from "next/navigation";
 import { useCookies } from "next-client-cookies";
-import { sendMoney } from "@/app/api/route";
+import { sendMoney, updateUserWallet } from "@/app/api/route";
 
-const SendMoneyForm = ({ isDialogOpened, handleCloseDialog }) => {
+const ChargeWalletForm = ({ isDialogOpened, handleCloseDialog }) => {
   const [id, setId] = useState(undefined);
   const router = useRouter();
   const cookies = useCookies();
@@ -29,16 +29,12 @@ const SendMoneyForm = ({ isDialogOpened, handleCloseDialog }) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const formJson = Object.fromEntries(formData.entries());
-    const amountSent = formJson.amountSent;
-    const senderUserId = formJson.senderUserId;
-    const receiverUserId = formJson.receiverUserId;
-    console.log("Amount Sent:", amountSent);
-    console.log("Sender User ID:", senderUserId);
-    console.log("Receiver User ID:", receiverUserId);
-    console.log(formJson);
+    formJson.wallet = Number(formJson.wallet);
+    //console.log(formJson);
     try {
-      const result = await sendMoney(formJson);
+      const result = await updateUserWallet(formJson);
       handleClose();
+      console.log("enviado");
     } catch (error) {
       console.log(error);
     }
@@ -54,27 +50,31 @@ const SendMoneyForm = ({ isDialogOpened, handleCloseDialog }) => {
           onSubmit: handleSubmit,
         }}
       >
-        <DialogTitle>Enviar Dinero</DialogTitle>
+        <DialogTitle>Recargar Wallet</DialogTitle>
         <DialogContent>
           <TextField
-            autoFocus
             required
             margin="dense"
-            id="amountSent"
-            name="amountSent"
-            label="Cantidad a Enviar"
-            type="number"
+            id="wallet"
+            name="wallet"
+            label="Cantidad a recargar"
             fullWidth
             variant="standard"
-          />
-          <TextField
-            required
-            margin="dense"
-            id="receiverUserId"
-            name="receiverUserId"
-            label="Número de Cuenta a Enviar"
-            fullWidth
-            variant="standard"
+            inputProps={{
+                min: "0",
+                pattern: "\\d*",
+                onKeyDown: (e) => {
+                  if (
+                    !/^[0-9]*$/.test(e.key) && 
+                    e.key !== "Backspace" && 
+                    e.key !== "Delete" && 
+                    e.key !== "ArrowLeft" && 
+                    e.key !== "ArrowRight" 
+                  ) {
+                    e.preventDefault();
+                  }
+                },
+              }}
           />
           <input
             type="hidden"
@@ -96,4 +96,4 @@ const SendMoneyForm = ({ isDialogOpened, handleCloseDialog }) => {
   );
 };
 
-export default SendMoneyForm;
+export default ChargeWalletForm;

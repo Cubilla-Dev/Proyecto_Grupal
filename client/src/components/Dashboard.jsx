@@ -1,11 +1,13 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableRow } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import AppBarComponent from '../components/AppBar';
 import AccountBalanceOutlinedIcon from '@mui/icons-material/AccountBalanceOutlined';
 import CssBaseline from '@mui/material/CssBaseline';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { useCookies } from 'next-client-cookies';
+import { getUserWallet } from '@/app/api/route';
 
 
 
@@ -21,6 +23,28 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({
 }))
 
 const Home = ({ handleDrawerClose }) => {
+
+    //obtener dinero en cuenta
+    const [efectivo,setEfectivo]=useState(undefined)
+    const [id,setId]=useState(undefined)
+    const cookies = useCookies();
+
+    useEffect(() => {
+        const cookieInfo = cookies.get("info");
+        const fetchData = async () => {
+            try {
+                if (cookieInfo) {
+                    const result = await getUserWallet(cookieInfo);
+                   // console.log("Saldo de la billetera:", result.walletBalance);
+                    setEfectivo(result.walletBalance)
+                    setId(cookieInfo)
+                }
+            } catch (error) {
+                console.error("Error al obtener el saldo de la billetera:", error);
+            }
+        };
+        fetchData();
+    }, [cookies, efectivo]);
 
     const [open, setOpen] = useState(false);
 
@@ -84,18 +108,22 @@ const Home = ({ handleDrawerClose }) => {
                 >
                     <Stack width="70%"  >
                         <Stack spacing={3} direction="column" >
-                            <Stack
-                                borderRadius="30px"
-                                component={Paper}
-                                height="150px"
-                                spacing={2}
-                                pl="50px"
-                                justifyContent="center"
-                            >
-                                <h4>Dinero Disponible</h4>
-                                <h2>123.456 Gs</h2>
-                                <h4>Cuenta número 817523-123</h4>
+                        
+                            <Stack spacing={3} direction="column">
+                                <Stack
+                                    borderRadius="30px"
+                                    component={Paper}
+                                    height="150px"
+                                    spacing={2}
+                                    pl="50px"
+                                    justifyContent="center"
+                                >
+                                    <h4>Dinero Disponible</h4>
+                                    <h2>{efectivo} Gs</h2>
+                                    <h4>Cuenta número: {id}</h4>
+                                </Stack>
                             </Stack>
+                     
                             <Stack direction="row" spacing={3}>
 
                                 <TableContainer
