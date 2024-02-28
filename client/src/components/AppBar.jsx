@@ -28,6 +28,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useState } from 'react';
 import Swal from 'sweetalert2'
+import SendMoneyForm from './modals/sendMoneyInterception';
 
 const drawerWidth = 260;
 
@@ -60,7 +61,6 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
     const [openModal, setOpenModal] = useState(false);
     const currentUser = useAppSelector(selectUser);
 
-
     const handleClickOpen = () => {
         setOpenModal(true);
     };
@@ -77,6 +77,7 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
             console.log("enviar dinero");
         } else {
             console.log("pagar servicio");
+            console.log("cargar");
         }
     }
 
