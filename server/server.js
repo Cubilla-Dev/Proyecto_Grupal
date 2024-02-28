@@ -24,6 +24,8 @@ app.use(express.static('public'));
 
 const adminRoutes = require('./routes/admin.routes'); 
 app.use("/api/admin", adminRoutes); 
+const serviceRoutes = require('./routes/companies.routes'); 
+app.use("/api/company", serviceRoutes);
 
 const sessionRoutes = require('./routes/session.routes');
 app.use("/api/session", sessionRoutes);

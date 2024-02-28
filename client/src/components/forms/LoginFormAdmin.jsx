@@ -50,7 +50,7 @@ const LoginFormAdmin = () => {
         try {
             const result = await loginAdmin(data);
             console.log(result);
-            router.push('/miTienda'); // Redirigir a la página principal
+            router.push('/pageAdmin'); // Redirigir a la página principal
         } catch (error) {
             console.log(error);
         }
