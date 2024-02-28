@@ -18,7 +18,7 @@ import PaymentsOutlinedIcon from '@mui/icons-material/PaymentsOutlined';
 import PhoneForwardedOutlinedIcon from '@mui/icons-material/PhoneForwardedOutlined';
 import { Paper, List, Typography, Button, Stack } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
-import { clearUser, selectLogged, userLogout } from '@/lib/features/users/userSlice';
+import { clearUser, selectLogged, userLogout, selectUser } from '@/lib/features/users/userSlice';
 import { useRouter } from 'next/navigation';
 import { logout } from '@/app/api/route';
 import Dialog from '@mui/material/Dialog';
@@ -27,6 +27,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useState } from 'react';
+import Swal from 'sweetalert2'
 
 const drawerWidth = 260;
 
@@ -57,21 +58,24 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
     const dispatch = useAppDispatch();
     const router = useRouter()
     const [openModal, setOpenModal] = useState(false);
+    const currentUser = useAppSelector(selectUser);
+
+
     const handleClickOpen = () => {
-      setOpenModal(true);
+        setOpenModal(true);
     };
     const handleClose = () => {
-      setOpenModal(false);
+        setOpenModal(false);
     };
 
     const handleRedirect = (route) => () => {
         router.push(route);
     }
 
-    const handleModal=(aux)=>{
-        if (aux===1) {
+    const handleModal = (aux) => {
+        if (aux === 1) {
             console.log("enviar dinero");
-        }else{
+        } else {
             console.log("pagar servicio");
         }
     }
@@ -83,7 +87,14 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
             console.log(result);
             dispatch(userLogout());
             dispatch(clearUser());
-            router.push("/login");
+            Swal.fire({
+                title: "Logout Successful",
+
+                icon: "success"
+            });
+            setTimeout(() => {
+                router.push("/login")
+            }, 1500);;
         } catch (error) {
             console.log(error);
         }
@@ -91,145 +102,147 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
 
     return (
         <>
-        <Box sx={{ display: 'flex' }}>
-            <CssBaseline />
-            <AppBar position="fixed" open={open} sx={{
-                backgroundColor: "rgb(66 130 108)",
-                boxShadow: "none",
-                height: "80px"
+            <Box sx={{ display: 'flex' }}>
+                <CssBaseline />
+                <AppBar position="fixed" open={open} sx={{
+                    backgroundColor: "rgb(66 130 108)",
+                    boxShadow: "none",
+                    height: "80px"
 
-            }}>
-                <Toolbar >
-                    <IconButton
-                        color="white"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        edge="start"
-                        sx={{ mr: 2, ...(open && { display: 'none', }), }}
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                    <Stack direction="row" spacing={130}>
-                        <Typography variant="h6" noWrap component="div">
-                            <img height="70px" src="https://z5vdccfn-8000.brs.devtunnels.ms/images/image-6.png" alt="logo" />
-                        </Typography>
-
-                        {
-                            !isLogged ?
-                                <Button onClick={handleRedirect("/login")} color='inherit'>Login</Button>
-                                :
-
-                                <Button onClick={handleLogout} color='inherit'>Logout</Button>
-                        }
-                    </Stack>
-
-                </Toolbar>
-            </AppBar>
-            <Drawer
-                sx={{
-                    width: drawerWidth,
-                    flexShrink: 0,
-                    '& .MuiDrawer-paper': {
-                        width: drawerWidth,
-                        boxSizing: 'border-box',
-                        mt: "1px",
-                        border: "none",
-                    },
-                }}
-                variant="persistent"
-                anchor="left"
-                open={open}
-            >
-                <DrawerHeader sx={{ display: "flex", flexDirection: "column", rowGap: "5px" }}>
-                    <Paper
-                        elevation={2}
-                        sx={{
-                            width: "100%",
-                            backgroundColor: "#f3f5f9",
-                            height: "100%",
-                            display: "flex",
-                            alignItems: "center",
-                            pl: "10px",
-                            columnGap: "25px",
-                            p: "10px 10px"
-                        }}
-                    >
-                        <img
-                            src="https://learnyzen.com/wp-content/uploads/2017/08/test1-481x385.png" alt="jonhg doe"
-                            height="55px"
-
-                            style={{
-                                borderRadius: "30px",
-                            }}
-                        />
-                        John Doe
-                    </Paper>
-                    <IconButton onClick={handleDrawerClose}
-                        onMouseOver={(e) => e.currentTarget.style.backgroundColor = "rgb(66 130 108)"}
-                        onMouseOut={(e) => e.currentTarget.style.backgroundColor = "#ffffff"}
-                    >
-                        {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-                    </IconButton>
-                </DrawerHeader>
-                <List sx={{ color: "#6e7a9a", display: "flex", flexDirection: "column", alignItems: "center", mt: "30px" }}>
-                    {['Dashboard', 'Movements', 'Payments','Acciones'].map((text, index) => (
-                        <ListItem
-                            sx={{ width: "250px" }}
-                            key={text}
-                            onMouseOver={(e) => e.currentTarget.style.color = 'whitesmoke'}
-                            onMouseOut={(e) => e.currentTarget.style.color = '#6e7a9a'}
+                }}>
+                    <Toolbar >
+                        <IconButton
+                            color="white"
+                            aria-label="open drawer"
+                            onClick={handleDrawerOpen}
+                            edge="start"
+                            sx={{ mr: 2, ...(open && { display: 'none', }), }}
                         >
-                            <ListItemButton
-                                component="a"
-                                href={index === 0 ? "/" : index === 1 ? "/movementsPage" : index === 2 ? "/paymentsPage" : undefined}
-                                onClick={() => index === 3 && handleClickOpen()}
-                                onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'rgb(66 130 108)'}
-                                onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#ffffff'}
-                            >
-                                <ListItemIcon>
-                                    {index === 0 ? <HomeOutlinedIcon /> : index === 1 ? <CurrencyExchangeOutlinedIcon /> : <PaymentsOutlinedIcon />}
-                                </ListItemIcon>
-                                <ListItemText primary={text} />
-                            </ListItemButton>
-                        </ListItem>
+                            <MenuIcon />
+                        </IconButton>
+                        <Stack direction="row" spacing={130}>
+                            <Typography variant="h6" noWrap component="div">
+                                <img height="70px" src="https://z5vdccfn-8000.brs.devtunnels.ms/images/image-6.png" alt="logo" />
+                            </Typography>
 
-                    ))}
-                </List>
-                <List sx={{ display: "flex", justifyContent: "center" }}>
-                    {['Contact Us'].map((text, index) => (
-                        <ListItem
-                            sx={{ color: "whitesmoke", mt: "300px", backgroundColor: "rgb(66 130 108)", width: "200px", height: "100px", borderRadius: "20px" }}
-                            key={text} disablePadding>
-                            <ListItemButton >
-                                <ListItemIcon>
-                                    {index % 2 === 0 ? <PhoneForwardedOutlinedIcon /> : <MailIcon />}
-                                </ListItemIcon>
-                                <ListItemText primary={text} />
-                            </ListItemButton>
-                        </ListItem>
-                    ))}
-                </List>
-            </Drawer>
-        </Box>
+                            {
+                                !isLogged ?
+                                    <Button onClick={handleRedirect("/login")} color='inherit'>Login</Button>
+                                    :
+
+                                    <Button onClick={handleLogout} color='inherit'>Logout</Button>
+                            }
+                        </Stack>
+
+                    </Toolbar>
+                </AppBar>
+                <Drawer
+                    sx={{
+                        width: drawerWidth,
+                        flexShrink: 0,
+                        '& .MuiDrawer-paper': {
+                            width: drawerWidth,
+                            boxSizing: 'border-box',
+                            mt: "1px",
+                            border: "none",
+                        },
+                    }}
+                    variant="persistent"
+                    anchor="left"
+                    open={open}
+                >
+                    <DrawerHeader sx={{ display: "flex", flexDirection: "column", rowGap: "5px", p:"none" }}>
+                        <Stack
+
+                            sx={{
+                                width: "260px",
+                                backgroundColor: "rgb(66 130 108)",
+                                height: "300px",
+                                display: "flex",
+                                alignItems: "center",
+                                pl: "10px",
+                                rowGap: "25px",
+                                p: "10px 10px",
+                                flexDirection: "column"
+                            }}
+                        >
+                            <img
+                                src="https://learnyzen.com/wp-content/uploads/2017/08/test1-481x385.png" alt="jonhg doe"
+                                height="95px"
+                                style={{
+                                    borderRadius: "50%",
+                                }}
+                            />
+                            <Typography>
+                                {currentUser.firstName} {currentUser.lastName}
+                            </Typography>
+                        </Stack>
+                        <IconButton onClick={handleDrawerClose}
+                            onMouseOver={(e) => e.currentTarget.style.backgroundColor = "rgb(66 130 108)"}
+                            onMouseOut={(e) => e.currentTarget.style.backgroundColor = "#ffffff"}
+                        >
+                            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+                        </IconButton>
+                    </DrawerHeader>
+                    <List sx={{ color: "#6e7a9a", display: "flex", flexDirection: "column", alignItems: "center", mt: "30px" }}>
+                        {['Dashboard', 'Movements', 'Payments', 'Acciones'].map((text, index) => (
+                            <ListItem
+                                sx={{ width: "250px" }}
+                                key={text}
+                                onMouseOver={(e) => e.currentTarget.style.color = 'whitesmoke'}
+                                onMouseOut={(e) => e.currentTarget.style.color = '#6e7a9a'}
+                            >
+                                <ListItemButton
+                                    component="a"
+                                    href={index === 0 ? "/" : index === 1 ? "/movementsPage" : index === 2 ? "/paymentsPage" : undefined}
+                                    onClick={() => index === 3 && handleClickOpen()}
+                                    onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'rgb(66 130 108)'}
+                                    onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#ffffff'}
+                                >
+                                    <ListItemIcon>
+                                        {index === 0 ? <HomeOutlinedIcon /> : index === 1 ? <CurrencyExchangeOutlinedIcon /> : <PaymentsOutlinedIcon />}
+                                    </ListItemIcon>
+                                    <ListItemText primary={text} />
+                                </ListItemButton>
+                            </ListItem>
+
+                        ))}
+                    </List>
+                    <List sx={{ display: "flex", justifyContent: "center" }}>
+                        {['Contact Us'].map((text, index) => (
+                            <ListItem
+                                sx={{ color: "whitesmoke", mt: "300px", backgroundColor: "rgb(66 130 108)", width: "200px", height: "100px", borderRadius: "20px" }}
+                                key={text} disablePadding>
+                                <ListItemButton >
+                                    <ListItemIcon>
+                                        {index % 2 === 0 ? <PhoneForwardedOutlinedIcon /> : <MailIcon />}
+                                    </ListItemIcon>
+                                    <ListItemText primary={text} />
+                                </ListItemButton>
+                            </ListItem>
+                        ))}
+                    </List>
+                </Drawer>
+            </Box>
             <Dialog
-            open={openModal}
-            onClose={handleClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
+                open={openModal}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
             >
-            <DialogTitle id="alert-dialog-title">
-            {"Qué desea realizar?"}
-            </DialogTitle>
-            <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-                <Button variant='contained'  onClick={() => handleModal(1)}>Enviar Dinero</Button>
-                <Button variant='contained'  onClick={() => handleModal(2)}>Pagar Servicios</Button>
-            </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-            <Button onClick={handleClose}>Cerrar</Button>
-            </DialogActions>
-        </Dialog>
+                <DialogTitle id="alert-dialog-title">
+                    {"Qué desea realizar?"}
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        <Button variant='contained' onClick={() => handleModal(1)}>Enviar Dinero</Button>
+                        <Button variant='contained' onClick={() => handleModal(2)}>Pagar Servicios</Button>
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>Cerrar</Button>
+                </DialogActions>
+            </Dialog>
         </>
     );
 }

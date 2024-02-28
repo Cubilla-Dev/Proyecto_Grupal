@@ -6,7 +6,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -14,7 +13,6 @@ import Typography from '@mui/material/Typography';
 import Link from 'next/link';
 import { login } from '@/app/api/route';
 import { useCookies } from 'next-client-cookies';
-
 import { setUser, userLogin } from '@/lib/features/users/userSlice';
 import { useRouter } from 'next/navigation';
 import { Paper } from '@mui/material';
@@ -49,8 +47,7 @@ const LoginForm = () => {
             dispatch(userLogin());
             dispatch(setUser(result.user));
             Swal.fire({
-                title: "Good job!",
-                text: [`Bienvenido ${data.email}`],
+                title: [`Bienvenido ${data.email}`],
                 icon: "success"
             });
             setTimeout(() => {
@@ -60,6 +57,10 @@ const LoginForm = () => {
         } catch (error) {
             console.log(error);
             setErrors(error.response?.data?.errors);
+            Swal.fire({
+                title: "Usuario no encontrado",
+                icon: "error"
+            });
         }
     };
 
