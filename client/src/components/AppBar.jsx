@@ -151,7 +151,7 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
                     anchor="left"
                     open={open}
                 >
-                    <DrawerHeader sx={{ display: "flex", flexDirection: "column", rowGap: "5px", p:"none" }}>
+                    <DrawerHeader sx={{ display: "flex", flexDirection: "column", rowGap: "5px", p: "none" }}>
                         <Stack
 
                             sx={{
@@ -163,7 +163,8 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
                                 pl: "10px",
                                 rowGap: "25px",
                                 p: "10px 10px",
-                                flexDirection: "column"
+                                flexDirection: "column",
+                                borderEndEndRadius:"30px"
                             }}
                         >
                             <img
@@ -173,7 +174,9 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
                                     borderRadius: "50%",
                                 }}
                             />
-                            <Typography>
+                            <Typography variant='h5' sx={{
+                                color:"white"
+                            }}>
                                 {currentUser.firstName} {currentUser.lastName}
                             </Typography>
                         </Stack>
