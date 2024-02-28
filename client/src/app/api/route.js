@@ -3,14 +3,17 @@ import axios from "axios";
 const myHeaders = new Headers();
 myHeaders.append("Content-Type", "application/json");
 const postOptions = (body) => ({ method: "POST", headers: myHeaders, credentials: 'include', redirect: 'follow', body: JSON.stringify(body) });
-
+import Swal from 'sweetalert2'
 /* Session Routes */
 export function login(data) {
     return new Promise(async (resolve, reject) => {
         try {
             const response = await axios.post(`${process.env.REACT_APP_API_DOMAIN}/session`, data, { withCredentials: true });
             const result = await response.data;
+
+
             resolve(result);
+
         } catch (error) {
             console.log(error);
             reject(error);
@@ -150,6 +153,6 @@ export function loginAdmin(data) {
         } catch (error) {
             console.log(error);
             reject(error);
-        }  
+        }
     });
 }
