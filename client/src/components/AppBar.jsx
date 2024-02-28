@@ -27,6 +27,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useState } from 'react';
+import Swal from 'sweetalert2'
 
 const drawerWidth = 260;
 
@@ -57,6 +58,9 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
     const dispatch = useAppDispatch();
     const router = useRouter()
     const [openModal, setOpenModal] = useState(false);
+    const currentUser = useAppSelector(selectUser);
+
+
     const handleClickOpen = () => {
         setOpenModal(true);
     };
@@ -71,7 +75,7 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
     const handleModal = (aux) => {
         if (aux === 1) {
             console.log("enviar dinero");
-        }else{
+        } else {
             console.log("pagar servicio");
         }
     }
@@ -160,7 +164,7 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
                                 rowGap: "25px",
                                 p: "10px 10px",
                                 flexDirection: "column",
-                                borderEndEndRadius:"30px"
+                                borderEndEndRadius: "30px"
                             }}
                         >
                             <img
@@ -171,7 +175,7 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
                                 }}
                             />
                             <Typography variant='h5' sx={{
-                                color:"white"
+                                color: "white"
                             }}>
                                 {currentUser.firstName} {currentUser.lastName}
                             </Typography>
@@ -229,19 +233,19 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-            <DialogTitle id="alert-dialog-title">
-            {"Qué desea realizar?"}
-            </DialogTitle>
-            <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-                <Button variant='contained'  onClick={() => handleModal(1)}>Enviar Dinero</Button>
-                <Button variant='contained'  onClick={() => handleModal(2)}>Pagar Servicios</Button>
-            </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-            <Button onClick={handleClose}>Cerrar</Button>
-            </DialogActions>
-        </Dialog>
+                <DialogTitle id="alert-dialog-title">
+                    {"Qué desea realizar?"}
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        <Button variant='contained' onClick={() => handleModal(1)}>Enviar Dinero</Button>
+                        <Button variant='contained' onClick={() => handleModal(2)}>Pagar Servicios</Button>
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>Cerrar</Button>
+                </DialogActions>
+            </Dialog>
         </>
     );
 }
