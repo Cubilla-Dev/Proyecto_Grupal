@@ -1,12 +1,15 @@
 'use client'
-
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableRow } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import AppBarComponent from '../components/AppBar';
 import AccountBalanceOutlinedIcon from '@mui/icons-material/AccountBalanceOutlined';
 import CssBaseline from '@mui/material/CssBaseline';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'; // Importa los componentes necesarios para el gráfico de barras
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { useCookies } from 'next-client-cookies';
+import { getUserWallet } from '@/app/api/route';
+
+
 
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
@@ -20,6 +23,28 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({
 }))
 
 const Home = ({ handleDrawerClose }) => {
+
+    //obtener dinero en cuenta
+    const [efectivo,setEfectivo]=useState(undefined)
+    const [id,setId]=useState(undefined)
+    const cookies = useCookies();
+
+    useEffect(() => {
+        const cookieInfo = cookies.get("info");
+        const fetchData = async () => {
+            try {
+                if (cookieInfo) {
+                    const result = await getUserWallet(cookieInfo);
+                   // console.log("Saldo de la billetera:", result.walletBalance);
+                    setEfectivo(result.walletBalance)
+                    setId(cookieInfo)
+                }
+            } catch (error) {
+                console.error("Error al obtener el saldo de la billetera:", error);
+            }
+        };
+        fetchData();
+    }, [cookies, efectivo]);
 
     const [open, setOpen] = useState(false);
 
@@ -43,14 +68,21 @@ const Home = ({ handleDrawerClose }) => {
         setOpen(false);
         handleDrawerClose;
     };
-
-    const data = [
-        { name: 'Enero', ingresos: 4000, egresos: 2000 },
-        { name: 'Febrero', ingresos: 3000, egresos: 1500 },
-        { name: 'Marzo', ingresos: 5000, egresos: 3000 },
-        { name: 'Abril', ingresos: 4500, egresos: 2800 },
-        { name: 'Mayo', ingresos: 6000, egresos: 3500 },
-        { name: 'Junio', ingresos: 5500, egresos: 3200 },
+    const dataIngresos = [
+        { name: 'Enero', Ingresos: 4000, },
+        { name: 'Febrero', Ingresos: 3000, },
+        { name: 'Marzo', Ingresos: 5000, },
+        { name: 'Abril', Ingresos: 4500, },
+        { name: 'Mayo', Ingresos: 6000, },
+        { name: 'Junio', Ingresos: 5500, },
+    ];
+    const dataEgresos = [
+        { name: 'Enero', Pagos: 2000, },
+        { name: 'Febrero', Pagos: 1000, },
+        { name: 'Marzo', Pagos: 6500, },
+        { name: 'Abril', Pagos: 7500, },
+        { name: 'Mayo', Pagos: 2000, },
+        { name: 'Junio', Pagos: 4500, },
     ];
 
     return (
@@ -63,7 +95,7 @@ const Home = ({ handleDrawerClose }) => {
                     mt: "79px",
                     height: "848px",
                     backgroundColor: "#f3f5f9",
-                    borderRadius: "50px",
+                    borderEndStartRadius: "50px",
 
                 }}
             >
@@ -74,18 +106,22 @@ const Home = ({ handleDrawerClose }) => {
                 >
                     <Stack width="70%"  >
                         <Stack spacing={3} direction="column" >
-                            <Stack
-                                borderRadius="30px"
-                                component={Paper}
-                                height="150px"
-                                spacing={2}
-                                pl="50px"
-                                justifyContent="center"
-                            >
-                                <h4>Dinero Disponible</h4>
-                                <h2>123.456 Gs</h2>
-                                <h4>Cuenta número 817523-123</h4>
+                        
+                            <Stack spacing={3} direction="column">
+                                <Stack
+                                    borderRadius="30px"
+                                    component={Paper}
+                                    height="150px"
+                                    spacing={2}
+                                    pl="50px"
+                                    justifyContent="center"
+                                >
+                                    <h4>Dinero Disponible</h4>
+                                    <h2>{efectivo} Gs</h2>
+                                    <h4>Cuenta número: {id}</h4>
+                                </Stack>
                             </Stack>
+                     
                             <Stack direction="row" spacing={3}>
 
                                 <TableContainer
@@ -164,18 +200,29 @@ const Home = ({ handleDrawerClose }) => {
                         alignItems="center"
                         p="0 30px"
                         rowGap="50px"
+                        pt="30px"
+                        pb="30px"
                     >
-                        <h1>Gráficos</h1>
                         <ResponsiveContainer width="100%" height={300}>
-                            <BarChart data={data}>
+                            <LineChart data={dataIngresos}>
                                 <CartesianGrid strokeDasharray="3 3" />
                                 <XAxis dataKey="name" />
                                 <YAxis />
                                 <Tooltip />
                                 <Legend />
-                                <Bar dataKey="ingresos" fill="#8884d8" />
-                                <Bar dataKey="egresos" fill="#82ca9d" />
-                            </BarChart>
+                                <Line type="natural" dataKey="Ingresos" stroke="green" />
+
+                            </LineChart>
+                        </ResponsiveContainer>
+                        <ResponsiveContainer width="100%" height={300}>
+                            <LineChart data={dataEgresos}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="name" />
+                                <YAxis />
+                                <Tooltip />
+                                <Legend />
+                                <Line type="natural" dataKey="Pagos" stroke="red" />
+                            </LineChart>
                         </ResponsiveContainer>
                     </Stack>
                 </Stack>

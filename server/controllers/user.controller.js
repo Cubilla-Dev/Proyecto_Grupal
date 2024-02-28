@@ -71,6 +71,41 @@ module.exports.deleteUser = async (req, res) => {
     }
 };
 
+//obtener wallet
+module.exports.findWallet = async (req, res) => {
+    try {
+      const user = await User.findOne({ _id: req.params.id });
+      if (user) {
+        const walletBalance = user.wallet;
+        res.status(200).json({ walletBalance });
+      } else {
+        res.status(404).json({ error: "User not found" });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: error.message });
+    }
+  };
+
+  //actualizar walet
+  module.exports.updateWallet = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { wallet } = req.body;
+        const user = await User.findOne({ _id: id });
+        if (user) {
+            user.wallet += wallet;
+            await user.save();
+
+            res.status(200).json({ walletBalance: user.wallet });
+        } else {
+            res.status(404).json({ error: 'User not found' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: error.message });
+    }
+};
 
 /* METODOS DE SESSION */
 
@@ -140,6 +175,7 @@ module.exports.login = async (req, res) => {
 module.exports.logout = async (req, res) => {
     try {
         res.clearCookie('userToken');
+        res.clearCookie('info')
         res.status(200);
         res.json({ msg: 'Logout successful.' });
     } catch (error) {

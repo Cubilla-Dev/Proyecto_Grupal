@@ -33,4 +33,8 @@ app.use("/api/session", sessionRoutes);
 const userRoutes = require('./routes/user.routes');
 app.use("/api/user", userRoutes);
 
+//send money
+const sendMoneyRoutes=require('./routes/sendMoney.routes')
+app.use("/api/send",sendMoneyRoutes)
+
 app.listen(port, () => console.log(`Listening on port: ${port}`));

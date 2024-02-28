@@ -6,7 +6,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -14,13 +13,12 @@ import Typography from '@mui/material/Typography';
 import Link from 'next/link';
 import { login } from '@/app/api/route';
 import { useCookies } from 'next-client-cookies';
-import { useAppDispatch } from '@/lib/hooks';
 import { setUser, userLogin } from '@/lib/features/users/userSlice';
 import { useRouter } from 'next/navigation';
 import { Paper } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
-
+import { useAppDispatch, useAppSelector } from '@/lib/hooks';
+import Swal from 'sweetalert2'
 
 
 
@@ -41,16 +39,33 @@ const LoginForm = () => {
             email: formData.get('email'),
             password: formData.get('password'),
         }
+        console.log(data)
         try {
             const result = await login(data);
             cookies.set("userToken", result.token);
+            cookies.set("info", result.user._id)
+            console.log(result.user._id);
             console.log(result);
             dispatch(userLogin());
             dispatch(setUser(result.user));
-            router.push("/");
+            Swal.fire({
+                title: [`Bienvenido ${data.email}`],
+                icon: "success",
+                confirmButtonColor: "#34473a",
+                iconColor: "#42826c"
+            });
+            setTimeout(() => {
+                router.push("/");
+            }, 1500);
+
         } catch (error) {
             console.log(error);
             setErrors(error.response?.data?.errors);
+            Swal.fire({
+                title: "Usuario no encontrado",
+                icon: "error",
+                confirmButtonColor: "#34473a"
+            });
         }
     };
 
@@ -102,7 +117,7 @@ const LoginForm = () => {
                                 error={Boolean(errors.email)}
                                 helperText={errors.email?.message}
                             />
-                            <TextField 
+                            <TextField
                                 margin="normal"
                                 required
                                 fullWidth
@@ -126,7 +141,9 @@ const LoginForm = () => {
 
                             >
                                 Log In
+
                             </Button>
+
                             <Grid container>
                                 <Grid item xs>
                                     <Link href="/passwordReset" variant="body2">
