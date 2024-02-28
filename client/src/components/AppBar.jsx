@@ -29,6 +29,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { useState } from 'react';
 import SendMoneyForm from './modals/sendMoneyInterception';
 
+
 const drawerWidth = 260;
 
 const AppBar = styled(MuiAppBar, {

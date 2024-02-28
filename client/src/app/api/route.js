@@ -156,3 +156,35 @@ export function loginAdmin(data) {
         }
     });
 }
+
+
+
+/*****ENVIAR DINEROOOOO */
+
+export function sendMoney(data) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_API_DOMAIN}/send`, data, { withCredentials: true });
+            const result = await response.data;
+            resolve(result);
+        } catch (error) {
+            console.log(error);
+            reject(error);
+        }
+    });
+}
+
+
+//obtener wallet
+export function getUserWallet(userId) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_API_DOMAIN}/user/${userId}/wallet`, { withCredentials: true });
+            const result = await response.data;
+            resolve(result);
+        } catch (error) {
+            console.log(error);
+            reject(error);
+        }
+    });
+}

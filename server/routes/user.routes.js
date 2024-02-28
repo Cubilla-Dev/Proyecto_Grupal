@@ -15,6 +15,8 @@ router.get("/:id", authenticate, userController.findUser);
 router.put("/:id", authenticate, userController.updateUser);
 router.delete("/:id", authenticate, userController.deleteUser);
 
+//obtener el saldo de la billetera del usuario por ID
+router.get("/:id/wallet", authenticate, userController.findWallet);
 
 
 module.exports = router;

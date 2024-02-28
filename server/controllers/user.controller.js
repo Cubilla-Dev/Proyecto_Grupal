@@ -71,6 +71,21 @@ module.exports.deleteUser = async (req, res) => {
     }
 };
 
+//obtener wallet
+module.exports.findWallet = async (req, res) => {
+    try {
+      const user = await User.findOne({ _id: req.params.id });
+      if (user) {
+        const walletBalance = user.wallet;
+        res.status(200).json({ walletBalance });
+      } else {
+        res.status(404).json({ error: "User not found" });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: error.message });
+    }
+  };
 
 /* METODOS DE SESSION */
 
