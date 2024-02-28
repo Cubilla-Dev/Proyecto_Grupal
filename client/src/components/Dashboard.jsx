@@ -1,13 +1,12 @@
 'use client'
+
 import React, { useState } from 'react';
 import { Box, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableRow } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import AppBarComponent from '../components/AppBar';
 import AccountBalanceOutlinedIcon from '@mui/icons-material/AccountBalanceOutlined';
 import CssBaseline from '@mui/material/CssBaseline';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-
-
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'; // Importa los componentes necesarios para el gráfico de barras
 
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
@@ -28,7 +27,6 @@ const Home = ({ handleDrawerClose }) => {
         setOpen(true);
     };
 
-
     const payments = [
         { imageSrc: '/alexSa.png', amount: '$100', date: '2024-02-24', company: "Alex S.A" },
         { imageSrc: '/bristol.jpg', amount: '$50', date: '2024-02-23', company: "Bristol s.A" },
@@ -41,12 +39,11 @@ const Home = ({ handleDrawerClose }) => {
         { icon: <AccountBalanceOutlinedIcon fontSize='large' />, amount: '- $400', date: '2024-02-22', user: "Carlos Ibarra" }
     ];
 
-
-
     const handleCloseDrawer = () => {
         setOpen(false);
         handleDrawerClose;
     };
+
     const data = [
         { name: 'Enero', ingresos: 4000, egresos: 2000 },
         { name: 'Febrero', ingresos: 3000, egresos: 1500 },
@@ -55,6 +52,7 @@ const Home = ({ handleDrawerClose }) => {
         { name: 'Mayo', ingresos: 6000, egresos: 3500 },
         { name: 'Junio', ingresos: 5500, egresos: 3200 },
     ];
+
     return (
         <Box>
             <CssBaseline />
@@ -169,15 +167,15 @@ const Home = ({ handleDrawerClose }) => {
                     >
                         <h1>Gráficos</h1>
                         <ResponsiveContainer width="100%" height={300}>
-                            <LineChart data={data}>
+                            <BarChart data={data}>
                                 <CartesianGrid strokeDasharray="3 3" />
                                 <XAxis dataKey="name" />
                                 <YAxis />
                                 <Tooltip />
                                 <Legend />
-                                <Line type="monotone" dataKey="ingresos" stroke="#8884d8" />
-                                <Line type="monotone" dataKey="egresos" stroke="#82ca9d" />
-                            </LineChart>
+                                <Bar dataKey="ingresos" fill="#8884d8" />
+                                <Bar dataKey="egresos" fill="#82ca9d" />
+                            </BarChart>
                         </ResponsiveContainer>
                     </Stack>
                 </Stack>
