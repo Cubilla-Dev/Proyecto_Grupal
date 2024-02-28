@@ -121,7 +121,7 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
                 anchor="left"
                 open={open}
             >
-                <DrawerHeader sx={{ display: "flex", flexDirection: "column", rowGap: "20px" }}>
+                <DrawerHeader sx={{ display: "flex", flexDirection: "column", rowGap: "5px" }}>
                     <Paper
                         elevation={2}
                         sx={{
@@ -152,8 +152,8 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
                         {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                     </IconButton>
                 </DrawerHeader>
-                <List sx={{ color: "#6e7a9a", display: "flex", flexDirection: "column", alignItems: "center", mt: "40px" }}>
-                    {['Dashboard', 'Movements', 'Payments'].map((text, index) => (
+                <List sx={{ color: "#6e7a9a", display: "flex", flexDirection: "column", alignItems: "center", mt: "30px" }}>
+                    {['Dashboard', 'Movements', 'Payments','Acciones'].map((text, index) => (
                         <ListItem
                             sx={{ width: "250px" }}
                             key={text}
@@ -178,7 +178,7 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
                 <List sx={{ display: "flex", justifyContent: "center" }}>
                     {['Contact Us'].map((text, index) => (
                         <ListItem
-                            sx={{ color: "whitesmoke", mt: "300px", backgroundColor: "rgb(66 130 108)", width: "200px", height: "120px", borderRadius: "20px" }}
+                            sx={{ color: "whitesmoke", mt: "300px", backgroundColor: "rgb(66 130 108)", width: "200px", height: "100px", borderRadius: "20px" }}
                             key={text} disablePadding>
                             <ListItemButton >
                                 <ListItemIcon>
