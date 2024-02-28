@@ -20,6 +20,7 @@ exports.findSendMoneyBySender = async (req, res) => {
     try {
         const senderUserId = req.params.id;
         const sendMoneyRecords = await SendMoney.find({ senderUserId });
+        console.log(sendMoneyRecords)
         res.status(200).json(sendMoneyRecords);
     } catch (error) {
         console.error("Error finding SendMoney by sender:", error);

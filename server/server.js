@@ -37,11 +37,11 @@ app.use("/api/user", userRoutes);
 const sendMoneyRoutes=require('./routes/sendMoney.routes')
 app.use("/api/send",sendMoneyRoutes)
 
-const transfRoutes = require('./routes/transf.cuentas.routes')
-app.use('/api/transferencia', transfRoutes)
+// const transfRoutes = require('./routes/transf.cuentas.routes')
+// app.use('/api/user', transfRoutes)
 
-const routerCuenta = require('./routes/crear.cuenta.routes')
-app.use('/api/crear-cuenta', routerCuenta)
+// const routerCuenta = require('./routes/sendMoney.routes')
+// app.use('/api/crear-cuenta', routerCuenta)
 
 //TODO: centralizacion de errores
 app.use((err, req, res, next) => {

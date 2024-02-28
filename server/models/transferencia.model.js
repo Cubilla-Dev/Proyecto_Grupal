@@ -12,23 +12,23 @@ const TransferenciaSchema = new mongoose.Schema({
         required: true,
         allowNull: false,
     },
-    nbr_completo_remite: {
-        type: String,
-        required: true,
-        allowNull: false,
-    },
+    // nbr_completo_remite: {
+    //     type: String,
+    //     required: true,
+    //     allowNull: false,
+    // },
     cuenta_remitente: {
-        type: Number,
+        type: String,
         required: true,
         allowNull: false    
     },
     cuenta_destinatario: {
-        type: Number,
+        type: String,
         required: true,
         allowNull: false    
     },
     monto: {
-        type: Number,
+        type: String,
         required: true,
         allowNull: false,
     },
@@ -37,6 +37,6 @@ const TransferenciaSchema = new mongoose.Schema({
 }, { timestamps: true, versionKey: false });
 
 
-const Transferencia = new mongoose.model("Historial_tranferecia", TransferenciaSchema);
+const Transferencia = new mongoose.model("historial_transferencia", TransferenciaSchema);
 
 module.exports = Transferencia;

@@ -2,65 +2,69 @@ const {ClientError} = require('../util/error')
 const catchedAsync = require('../util/catched.Async')
 const response = require('../util/response')
 
-const Cuenta = require('../models/cuenta.model')
+const User = require('../models/user.model')
 const Transferencia = require('../models/transferencia.model')
 
 const transfController = {
     transfCuentas: catchedAsync(  async (req, res) => {
-        const {cuent_destino, cuent_remitente, nomb_completo_desti, can_dinero, nro_documento } = req.body;
-        const cantidadDinero = parseFloat(can_dinero);
+        const { amountSent, senderUserId, receiverUserId } = req.body;
 
-        const verifiCuentaRemite = await Cuenta.findOne({numero_cuenta: cuent_remitente})
-        const verifiCuentaDesti = await Cuenta.findOne({numero_cuenta: cuent_destino})
+        const cantidadDinero = parseFloat(amountSent);
+
+        const verifiCuentaRemite = await User.findOne({_id: senderUserId})
+        const verifiCuentaDesti = await User.findOne({_id: receiverUserId})
 
         if(!verifiCuentaRemite){
             throw new ClientError('Cuenta no encontrada', 403)
         }
         //obteniendo el monto del dinero de la cuenta del remitente
-        const verifiSaldo = verifiCuentaRemite.saldo_cuenta;
-        const nbr_completo_remite = verifiCuentaRemite.nombre_completo;
+        const verifiSaldo = verifiCuentaRemite.wallet;
+        const firstName = verifiCuentaDesti.firstName;
+        const lastName = verifiCuentaDesti.lastName;
         
-        if(verifiSaldo < can_dinero){
+        if(verifiSaldo < amountSent){
             throw new ClientError('Cantidad de dinero insuficiente', 403)
-        }
-        
-        if(!(Number(nro_documento) === verifiCuentaDesti.nro_documento && nomb_completo_desti === verifiCuentaDesti.nombre_completo)){
-            throw new ClientError('Numero de documento con el nombre no coiciden', 403)
         }
 
         //modificando la cuenta de destino con el dinero que recibio
-        const actualizarCuenta = await Cuenta.findOneAndUpdate(
-            { numero_cuenta: cuent_destino},
+        const actualizarCuenta = await User.findOneAndUpdate(
+            { _id: receiverUserId},
             //inc incrementa o decrementa el valor de ese campo
-            { $inc: { saldo_cuenta: cantidadDinero}},
+            { $inc: { wallet: cantidadDinero}},
             { new: true }
         )
 
         if(actualizarCuenta){
-            await Cuenta.findOneAndUpdate(
-                { numero_cuenta: cuent_remitente},
+            await User.findOneAndUpdate(
+                { _id: senderUserId},
                 //inc incrementa o decrementa el valor de ese campo
-                { $inc: { saldo_cuenta: (-1 * cantidadDinero)}},
+                { $inc: { wallet: (-1 * cantidadDinero)}},
                 { new: true }
             )
+            //guardando la transferencia
+            const nuevaTransf = await new Transferencia({ 
+                nbr_completo_destina: `${firstName} ${lastName}`,
+                cuenta_destinatario: receiverUserId,
+                cuenta_remitente: senderUserId,
+                monto: amountSent,
+            });
+            nuevaTransf.save();
         }
 
         if(!actualizarCuenta){
             throw new ClientError('Hubo un error en la transferencia', 409)
         }
 
-        //guardando la transferencia
-        const nuevaTransf = await new Transferencia({ 
-            nbr_completo_destina: nomb_completo_desti,
-            nbr_completo_remite: nbr_completo_remite,
-            cuenta_destinatario: cuent_destino,
-            cuenta_remitente: cuent_remitente,
-            monto: can_dinero,
-        });
+        response(res, 200, {
+            message: 'Tranferencia realizada correctamente'
+        })
+    }),
+    historyTranf: catchedAsync(async (req, res) => {
+        const senderUserId = req.params.id;
+        const sendMoneyRecords = await Transferencia.find({ cuenta_remitente: senderUserId });  
+        console.log('datos del historial ',sendMoneyRecords)
 
-        nuevaTransf.save();
-
-        response(res, 200, actualizarCuenta)
+        response(res, 200, sendMoneyRecords)
     })
 }
 

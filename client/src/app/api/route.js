@@ -224,6 +224,23 @@ export function getUserWallet(userId) {
   });
 }
 
+//obtener wallet
+export function getUserHistoryTranf(userId) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_DOMAIN}/send/${userId}`,
+        { withCredentials: true }
+      );
+      const result = await response.data;
+      resolve(result);
+    } catch (error) {
+      console.log(error);
+      reject(error);
+    }
+  });
+}
+
 //actualizar wallet
 export function updateUserWallet(data) {
     console.log(data.wallet);

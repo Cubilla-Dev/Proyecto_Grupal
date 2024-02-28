@@ -7,7 +7,7 @@ import AccountBalanceOutlinedIcon from '@mui/icons-material/AccountBalanceOutlin
 import CssBaseline from '@mui/material/CssBaseline';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { useCookies } from 'next-client-cookies';
-import { getUserWallet } from '@/app/api/route';
+import { getUserWallet, getUserHistoryTranf } from '@/app/api/route';
 
 
 
@@ -27,15 +27,19 @@ const Home = ({ handleDrawerClose }) => {
     //obtener dinero en cuenta
     const [efectivo,setEfectivo]=useState(undefined)
     const [id,setId]=useState(undefined)
+    const [historyTranf, setHistoryTranf]=useState([])
     const cookies = useCookies();
 
     useEffect(() => {
+        //obteer el id
         const cookieInfo = cookies.get("info");
         const fetchData = async () => {
             try {
                 if (cookieInfo) {
+                    const resultHistory = await getUserHistoryTranf(cookieInfo);
                     const result = await getUserWallet(cookieInfo);
                    // console.log("Saldo de la billetera:", result.walletBalance);
+                    setHistoryTranf(resultHistory.data)
                     setEfectivo(result.walletBalance)
                     setId(cookieInfo)
                 }
@@ -45,6 +49,9 @@ const Home = ({ handleDrawerClose }) => {
         };
         fetchData();
     }, [cookies, efectivo]);
+
+    //TODO: Console log de historial para que no se pierda
+    console.log('el historial de datos es ', historyTranf)
 
     const [open, setOpen] = useState(false);
 
@@ -118,7 +125,7 @@ const Home = ({ handleDrawerClose }) => {
                                 >
                                     <h4>Dinero Disponible</h4>
                                     <h2>{efectivo} Gs</h2>
-                                    <h4>Cuenta número: {id}</h4>
+                                    <h4>Numero de Cuenta: {id}</h4>
                                 </Stack>
                             </Stack>
                      
@@ -145,7 +152,7 @@ const Home = ({ handleDrawerClose }) => {
                                             flexDirection: "column",
 
                                         }}   >
-                                            {payments.map((payments, idx) => (
+                                            {movements.map((payments, idx) => (
                                                 <TableRow key={idx} >
                                                     <TableCell sx={{ width: "130px" }} ><img width="40px" style={{ borderRadius: "50%" }} src={payments.imageSrc} /></TableCell>
                                                     <TableCell sx={{ width: "130px" }} > {payments.company}</TableCell>
@@ -176,12 +183,13 @@ const Home = ({ handleDrawerClose }) => {
                                         }}
                                     >
                                         <TableBody>
-                                            {movements.map((movements, idx) => (
+                                            {historyTranf.map((history, idx) => (
                                                 <TableRow key={idx} >
-                                                    <TableCell sx={{ color: "green", width: "130px" }}>{movements.icon}</TableCell>
-                                                    <TableCell sx={{ width: "130px" }}>{movements.user}</TableCell>
-                                                    <TableCell sx={{ width: "130px" }} >{movements.amount}</TableCell>
-                                                    <TableCell >{movements.date}</TableCell>
+                                                    <TableCell sx={{ color: "green", width: "130px" }}><AccountBalanceOutlinedIcon fontSize='large' />
+                                                    </TableCell>
+                                                    <TableCell sx={{ width: "130px" }}>{history.nbr_completo_destina}</TableCell>
+                                                    <TableCell sx={{ width: "130px" }} >{history.monto}</TableCell>
+                                                    <TableCell >{history.date}</TableCell>
                                                 </TableRow>
                                             )
                                             )}

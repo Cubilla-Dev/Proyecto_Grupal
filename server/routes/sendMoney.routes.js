@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-
+const transfController = require('../controllers/transf.controller')
 const moneySend=require('../controllers/sendMoney.controller')
 // Create
-router.post("", moneySend.createSendMoney);
+router.post("", transfController.transfCuentas);
 
 //find all by id
-router.get("/:id", moneySend.findSendMoneyBySender);
+router.get("/:id", transfController.historyTranf);
 
 module.exports = router;
