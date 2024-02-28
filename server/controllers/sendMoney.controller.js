@@ -18,7 +18,7 @@ exports.createSendMoney = async (req, res) => {
 
 exports.findSendMoneyBySender = async (req, res) => {
     try {
-        const senderUserId = req.params.senderUserId;
+        const senderUserId = req.params.id;
         const sendMoneyRecords = await SendMoney.find({ senderUserId });
         res.status(200).json(sendMoneyRecords);
     } catch (error) {
