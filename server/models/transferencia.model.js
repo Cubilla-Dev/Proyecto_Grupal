@@ -7,12 +7,27 @@ const TransferenciaSchema = new mongoose.Schema({
         primaryKey: true,
         defaultValue: () => uuidv4()
     },
-    nbr_completo: {
+    nbr_completo_destina: {
         type: String,
         required: true,
         allowNull: false,
     },
+    nbr_completo_remite: {
+        type: String,
+        required: true,
+        allowNull: false,
+    },
+    nro_documento: {
+        type: Number,
+        required: true,
+        allowNull: false    
+    },
     cuenta_remitente: {
+        type: Number,
+        required: true,
+        allowNull: false    
+    },
+    cuenta_destinatario: {
         type: Number,
         required: true,
         allowNull: false    
