@@ -16,7 +16,7 @@ import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import CurrencyExchangeOutlinedIcon from '@mui/icons-material/CurrencyExchangeOutlined';
 import PaymentsOutlinedIcon from '@mui/icons-material/PaymentsOutlined';
 import PhoneForwardedOutlinedIcon from '@mui/icons-material/PhoneForwardedOutlined';
-import { Paper, List, Typography, Button, Stack } from '@mui/material';
+import { Paper, List, Typography, Button, Stack, Modal } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { clearUser, selectLogged, userLogout, selectUser } from '@/lib/features/users/userSlice';
 import { useRouter } from 'next/navigation';
@@ -64,7 +64,10 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [isOpen2, setIsOpen2] = useState(false);
     const [isOpen3, setIsOpen3] = useState(false);
+    const [openModalChat, setOpenModalChat] = useState(false);
+
     const currentUser = useAppSelector(selectUser)
+
     const handleClickOpen = () => {
         setOpenModal(true);
     };
@@ -75,6 +78,15 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
     const handleRedirect = (route) => () => {
         router.push(route);
     }
+
+    const handleOpenChat = () => {
+        setOpenModalChat(true);
+    };
+
+    const handleCloseChat = () => {
+        setOpenModalChat(false);
+    };
+
 
     const handleModal = (aux) => {
         if (aux === 1) {
@@ -168,13 +180,15 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
                     anchor="left"
                     open={open}
                 >
-                    <DrawerHeader sx={{ display: "flex", flexDirection: "column", rowGap: "5px", p: "none" }}>
+                    <DrawerHeader sx={{
+                        display: "flex", flexDirection: "column", rowGap: "5px"
+                    }}>
                         <Stack
 
                             sx={{
                                 width: "260px",
                                 backgroundColor: "rgb(66 130 108)",
-                                height: "300px",
+                                height: "200px",
                                 display: "flex",
                                 alignItems: "center",
                                 pl: "10px",
@@ -228,20 +242,31 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
 
                         ))}
                     </List>
-                    <List sx={{ display: "flex", justifyContent: "center" }}>
-                        {['Contact Us'].map((text, index) => (
-                            <ListItem
-                                sx={{ color: "whitesmoke", mt: "300px", backgroundColor: "rgb(66 130 108)", width: "200px", height: "100px", borderRadius: "20px" }}
-                                key={text} disablePadding>
-                                <ListItemButton >
-                                    <ListItemIcon>
-                                        {index % 2 === 0 ? <PhoneForwardedOutlinedIcon /> : <MailIcon />}
-                                    </ListItemIcon>
-                                    <ListItemText primary={text} />
-                                </ListItemButton>
-                            </ListItem>
-                        ))}
-                    </List>
+                    <Stack mt="200px" justifyContent="center" direction="row" >
+                        <Button onClick={handleOpenChat} variant='contained' sx={{ backgroundColor: "rgb(66 130 108)", ":hover": { backgroundColor: "#34473a" } }}>Contact Us <PhoneForwardedOutlinedIcon /></Button>
+                        <Modal
+                            open={openModalChat}
+                            onClose={handleCloseChat}
+                            aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description"
+                            
+                        >
+                            <Box sx={{
+                                position: 'absolute',
+                                top: '50%',
+                                left: '50%',
+                                transform: 'translate(-50%, -50%)',
+                                width: 400,
+                                bgcolor: 'background.paper',
+                                boxShadow: 24,
+                                p: 4,
+                            }}>
+                                <h2 id="modal-modal-title">Contenido del Modal</h2>
+                                <p id="modal-modal-description"> Aquí puedes poner cualquier contenido que desees mostrar dentro del modal.</p>
+                                <Button onClick={handleCloseChat}>Cerrar</Button>
+                            </Box>
+                        </Modal>
+                    </Stack>
                 </Drawer>
             </Box>
             <Dialog
