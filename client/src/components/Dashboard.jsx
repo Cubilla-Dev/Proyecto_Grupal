@@ -65,7 +65,7 @@ const Home = ({ handleDrawerClose }) => {
                     mt: "79px",
                     height: "848px",
                     backgroundColor: "#f3f5f9",
-                    borderRadius: "50px",
+                    borderEndStartRadius: "50px",
 
                 }}
             >

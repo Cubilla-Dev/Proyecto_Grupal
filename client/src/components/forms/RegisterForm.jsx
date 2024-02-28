@@ -8,13 +8,12 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
 import { register } from '@/app/api/route';
 import Link from 'next/link';
 import { Paper } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
+import Swal from 'sweetalert2'
 
 
 const defaultTheme = createTheme();
@@ -38,10 +37,21 @@ const RegisterForm = () => {
         try {
             const result = await register(data);
             console.log(result);
-            router.push("/login")
+            Swal.fire({
+                title: "Good job!",
+                text: [`Bienvenido ${data.firstName}`],
+                icon: "success"
+            });
+            setTimeout(() => {
+                router.push("/login")
+            }, 1500);
         } catch (error) {
             console.log(error);
             setErrors(error.response.data.errors);
+            Swal.fire({
+                title: ` Favor complete los campos`,
+                icon: "error"
+            });
         }
     };
 
