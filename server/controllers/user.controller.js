@@ -87,6 +87,26 @@ module.exports.findWallet = async (req, res) => {
     }
   };
 
+  //actualizar walet
+  module.exports.updateWallet = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { wallet } = req.body;
+        const user = await User.findOne({ _id: id });
+        if (user) {
+            user.wallet += wallet;
+            await user.save();
+
+            res.status(200).json({ walletBalance: user.wallet });
+        } else {
+            res.status(404).json({ error: 'User not found' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: error.message });
+    }
+};
+
 /* METODOS DE SESSION */
 
 module.exports.login = async (req, res) => {

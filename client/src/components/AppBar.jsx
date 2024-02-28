@@ -28,6 +28,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useState } from 'react';
 import SendMoneyForm from './modals/sendMoneyInterception';
+import ChargeWalletForm from './modals/chargeWallet';
 
 
 const drawerWidth = 260;
@@ -60,6 +61,8 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
     const router = useRouter()
     const [openModal, setOpenModal] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
+    const [isOpen2, setIsOpen2] = useState(false);
+    const [isOpen3, setIsOpen3] = useState(false);
     const currentUser=useAppSelector(selectUser)
     const handleClickOpen = () => {
         setOpenModal(true);
@@ -74,14 +77,14 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
 
     const handleModal=(aux)=>{
         if (aux===1) {
-            console.log("enviar dinero");
+            //console.log("enviar dinero");
             //router.push("/sendMoney")
             setIsOpen(!isOpen);
         }else if (aux===2) {
             console.log("pago");
         }else{
-            console.log("pagar servicio");
             console.log("cargar");
+            setIsOpen3(!isOpen3);
         }
     }
 
@@ -281,6 +284,10 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
         <SendMoneyForm
         isDialogOpened={isOpen}
         handleCloseDialog={() => setIsOpen(false)}
+      />
+      <ChargeWalletForm
+        isDialogOpened={isOpen3}
+        handleCloseDialog={() => setIsOpen3(false)}
       />
         </>
     );
