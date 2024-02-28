@@ -1,42 +1,42 @@
 const mongoose = require("mongoose");
 
 
-const TransferenciaSchema = new mongoose.Schema({
+const CuentaSchema = new mongoose.Schema({
     id: {
         type: String,
         primaryKey: true,
         defaultValue: () => uuidv4()
     },
-    nbr_completo_destina: {
+    nombre_completo: {
         type: String,
         required: true,
         allowNull: false,
     },
-    nbr_completo_remite: {
+    nro_documento: {
+        type: Number,
+        required: true,
+        allowNull: false    
+    },
+    numero_cuenta: {
+        type: Number,
+        required: true,
+        allowNull: false    
+    },
+    direccion: {
         type: String,
         required: true,
-        allowNull: false,
-    },
-    cuenta_remitente: {
-        type: Number,
-        required: true,
         allowNull: false    
     },
-    cuenta_destinatario: {
-        type: Number,
-        required: true,
-        allowNull: false    
-    },
-    monto: {
+    saldo_cuenta: {
         type: Number,
         required: true,
         allowNull: false,
-    },
+    }
 
 
 }, { timestamps: true, versionKey: false });
 
 
-const Transferencia = new mongoose.model("Historial_tranferecia", TransferenciaSchema);
+const Cuenta = new mongoose.model("Cuenta", CuentaSchema);
 
-module.exports = Transferencia;
+module.exports = Cuenta;

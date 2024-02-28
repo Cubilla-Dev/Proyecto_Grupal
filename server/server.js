@@ -2,6 +2,7 @@ require('dotenv').config()
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const resError = require('./util/res.error')
 const app = express();
 const port = 8000;
 
@@ -32,5 +33,17 @@ app.use("/api/session", sessionRoutes);
 
 const userRoutes = require('./routes/user.routes');
 app.use("/api/user", userRoutes);
+
+const transfRoutes = require('./routes/transf.cuentas.routes')
+app.use('/api/transferencia', transfRoutes)
+
+const routerCuenta = require('./routes/crear.cuenta.routes')
+app.use('/api/crear-cuenta', routerCuenta)
+
+//TODO: centralizacion de errores
+app.use((err, req, res, next) => {
+    const { statusCode, message } = err;
+    resError(res, statusCode, message)
+})
 
 app.listen(port, () => console.log(`Listening on port: ${port}`));

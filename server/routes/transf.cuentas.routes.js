@@ -1,9 +1,8 @@
 const express = require('express');
-const router = express.Router();
-
-
+const routerTrasnf = express.Router();
+const transfController = require('../controllers/transf.controller')
 
 /* Rutas de transferencia */
-router.post("", );
+routerTrasnf.post("", transfController.transfCuentas);
 
-module.exports = router;
+module.exports = routerTrasnf;
