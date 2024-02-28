@@ -55,7 +55,7 @@ const LoginForm = () => {
                 iconColor: "#42826c"
             });
             setTimeout(() => {
-               router.push("/");
+                router.push("/");
             }, 1500);
 
         } catch (error) {
@@ -63,7 +63,8 @@ const LoginForm = () => {
             setErrors(error.response?.data?.errors);
             Swal.fire({
                 title: "Usuario no encontrado",
-                icon: "error"
+                icon: "error",
+                confirmButtonColor: "#34473a"
             });
         }
     };
