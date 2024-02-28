@@ -140,6 +140,7 @@ module.exports.login = async (req, res) => {
 module.exports.logout = async (req, res) => {
     try {
         res.clearCookie('userToken');
+        res.clearCookie('info')
         res.status(200);
         res.json({ msg: 'Logout successful.' });
     } catch (error) {
