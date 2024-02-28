@@ -27,6 +27,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useState } from 'react';
+import SendMoneyForm from './modals/sendMoneyInterception';
 
 const drawerWidth = 260;
 
@@ -57,6 +58,7 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
     const dispatch = useAppDispatch();
     const router = useRouter()
     const [openModal, setOpenModal] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
     const handleClickOpen = () => {
       setOpenModal(true);
     };
@@ -71,8 +73,12 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
     const handleModal=(aux)=>{
         if (aux===1) {
             console.log("enviar dinero");
+            //router.push("/sendMoney")
+            setIsOpen(!isOpen);
+        }else if (aux===2) {
+            console.log("pago");
         }else{
-            console.log("pagar servicio");
+            console.log("cargar");
         }
     }
 
@@ -222,14 +228,38 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
             </DialogTitle>
             <DialogContent>
             <DialogContentText id="alert-dialog-description">
-                <Button variant='contained'  onClick={() => handleModal(1)}>Enviar Dinero</Button>
-                <Button variant='contained'  onClick={() => handleModal(2)}>Pagar Servicios</Button>
+            <Button
+                variant='contained'
+                onClick={() => handleModal(1)}
+                style={{ backgroundColor: 'rgb(66, 130, 108)', color: '#ffffff' }}
+                >
+                Enviar Dinero
+                </Button>
+
+            <Button
+                variant='contained'
+                onClick={() => handleModal(2)}
+                style={{ backgroundColor: 'rgb(66, 130, 108)', color: '#ffffff' }}
+                >
+                Pagar Servicios
+            </Button>
+            <Button
+                variant='contained'
+                onClick={() => handleModal(3)}
+                style={{ backgroundColor: 'rgb(66, 130, 108)', color: '#ffffff' }}
+                >
+                Cargar Billetera
+            </Button>
             </DialogContentText>
             </DialogContent>
             <DialogActions>
-            <Button onClick={handleClose}>Cerrar</Button>
+            <Button onClick={handleClose} color='error'>Cerrar</Button>
             </DialogActions>
         </Dialog>
+        <SendMoneyForm
+        isDialogOpened={isOpen}
+        handleCloseDialog={() => setIsOpen(false)}
+      />
         </>
     );
 }
