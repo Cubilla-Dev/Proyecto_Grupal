@@ -21,6 +21,12 @@ import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { clearUser, selectLogged, userLogout } from '@/lib/features/users/userSlice';
 import { useRouter } from 'next/navigation';
 import { logout } from '@/app/api/route';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import { useState } from 'react';
 
 const drawerWidth = 260;
 
@@ -34,7 +40,6 @@ const AppBar = styled(MuiAppBar, {
     ...(open && {
         width: `calc(100% - ${drawerWidth}px)`,
         marginLeft: drawerWidth,
-
     }),
 }));
 
@@ -44,8 +49,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     padding: theme.spacing(0, 1),
     ...theme.mixins.toolbar,
     justifyContent: 'flex-end',
-
-
 }));
 
 const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
@@ -53,9 +56,24 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
     const isLogged = useAppSelector(selectLogged);
     const dispatch = useAppDispatch();
     const router = useRouter()
+    const [openModal, setOpenModal] = useState(false);
+    const handleClickOpen = () => {
+      setOpenModal(true);
+    };
+    const handleClose = () => {
+      setOpenModal(false);
+    };
 
     const handleRedirect = (route) => () => {
         router.push(route);
+    }
+
+    const handleModal=(aux)=>{
+        if (aux===1) {
+            console.log("enviar dinero");
+        }else{
+            console.log("pagar servicio");
+        }
     }
 
 
@@ -72,6 +90,7 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
     }
 
     return (
+        <>
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
             <AppBar position="fixed" open={open} sx={{
@@ -162,7 +181,8 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
                         >
                             <ListItemButton
                                 component="a"
-                                href={index === 0 ? "/" : index === 1 ? "/movementsPage" : "/paymentsPage"}
+                                href={index === 0 ? "/" : index === 1 ? "/movementsPage" : index === 2 ? "/paymentsPage" : undefined}
+                                onClick={() => index === 3 && handleClickOpen()}
                                 onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'rgb(66 130 108)'}
                                 onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#ffffff'}
                             >
@@ -191,6 +211,26 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
                 </List>
             </Drawer>
         </Box>
+            <Dialog
+            open={openModal}
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            >
+            <DialogTitle id="alert-dialog-title">
+            {"Qué desea realizar?"}
+            </DialogTitle>
+            <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+                <Button variant='contained'  onClick={() => handleModal(1)}>Enviar Dinero</Button>
+                <Button variant='contained'  onClick={() => handleModal(2)}>Pagar Servicios</Button>
+            </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+            <Button onClick={handleClose}>Cerrar</Button>
+            </DialogActions>
+        </Dialog>
+        </>
     );
 }
 
