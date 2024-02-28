@@ -16,8 +16,11 @@ import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import CurrencyExchangeOutlinedIcon from '@mui/icons-material/CurrencyExchangeOutlined';
 import PaymentsOutlinedIcon from '@mui/icons-material/PaymentsOutlined';
 import PhoneForwardedOutlinedIcon from '@mui/icons-material/PhoneForwardedOutlined';
-import { Paper, List, Typography } from '@mui/material';
-import Link from 'next/link';
+import { Paper, List, Typography, Button, Stack } from '@mui/material';
+import { useAppDispatch, useAppSelector } from '@/lib/hooks';
+import { clearUser, selectLogged, userLogout } from '@/lib/features/users/userSlice';
+import { useRouter } from 'next/navigation';
+import { logout } from '@/app/api/route';
 
 const drawerWidth = 260;
 
@@ -47,7 +50,26 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
     const theme = useTheme();
+    const isLogged = useAppSelector(selectLogged);
+    const dispatch = useAppDispatch();
+    const router = useRouter()
 
+    const handleRedirect = (route) => () => {
+        router.push(route);
+    }
+
+
+    const handleLogout = async () => {
+        try {
+            const result = await logout();
+            console.log(result);
+            dispatch(userLogout());
+            dispatch(clearUser());
+            router.push("/login");
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
         <Box sx={{ display: 'flex' }}>
@@ -55,9 +77,10 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
             <AppBar position="fixed" open={open} sx={{
                 backgroundColor: "rgb(66 130 108)",
                 boxShadow: "none",
+                height: "80px"
 
             }}>
-                <Toolbar>
+                <Toolbar >
                     <IconButton
                         color="white"
                         aria-label="open drawer"
@@ -67,12 +90,20 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant="h6" noWrap component="div">
-                        <img height="70px" src="/virtualwallet.png" alt="logo" />
-                    </Typography>
-                    <Typography variant="h6" noWrap component="div">
-                        LOGOUT
-                    </Typography>
+                    <Stack direction="row" spacing={130}>
+                        <Typography variant="h6" noWrap component="div">
+                            <img height="70px" src="https://z5vdccfn-8000.brs.devtunnels.ms/images/image-6.png" alt="logo" />
+                        </Typography>
+
+                        {
+                            !isLogged ?
+                                <Button onClick={handleRedirect("/login")} color='inherit'>Login</Button>
+                                :
+
+                                <Button onClick={handleLogout} color='inherit'>Logout</Button>
+                        }
+                    </Stack>
+
                 </Toolbar>
             </AppBar>
             <Drawer
@@ -90,7 +121,7 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
                 anchor="left"
                 open={open}
             >
-                <DrawerHeader sx={{ display: "flex", flexDirection: "column", rowGap: "20px" }}>
+                <DrawerHeader sx={{ display: "flex", flexDirection: "column", rowGap: "5px" }}>
                     <Paper
                         elevation={2}
                         sx={{
@@ -121,8 +152,8 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
                         {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                     </IconButton>
                 </DrawerHeader>
-                <List sx={{ color: "#6e7a9a", display: "flex", flexDirection: "column", alignItems: "center", mt: "40px" }}>
-                    {['Dashboard', 'Movements', 'Payments'].map((text, index) => (
+                <List sx={{ color: "#6e7a9a", display: "flex", flexDirection: "column", alignItems: "center", mt: "30px" }}>
+                    {['Dashboard', 'Movements', 'Payments','Acciones'].map((text, index) => (
                         <ListItem
                             sx={{ width: "250px" }}
                             key={text}
@@ -131,7 +162,7 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
                         >
                             <ListItemButton
                                 component="a"
-                                href={index === 0 ? "/dashboardPage" : index === 1 ? "/movementsPage" : "/paymentsPage"}
+                                href={index === 0 ? "/" : index === 1 ? "/movementsPage" : "/paymentsPage"}
                                 onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'rgb(66 130 108)'}
                                 onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#ffffff'}
                             >
@@ -147,7 +178,7 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
                 <List sx={{ display: "flex", justifyContent: "center" }}>
                     {['Contact Us'].map((text, index) => (
                         <ListItem
-                            sx={{ color: "whitesmoke", mt: "300px", backgroundColor: "rgb(66 130 108)", width: "200px", height: "120px", borderRadius: "20px" }}
+                            sx={{ color: "whitesmoke", mt: "300px", backgroundColor: "rgb(66 130 108)", width: "200px", height: "100px", borderRadius: "20px" }}
                             key={text} disablePadding>
                             <ListItemButton >
                                 <ListItemIcon>

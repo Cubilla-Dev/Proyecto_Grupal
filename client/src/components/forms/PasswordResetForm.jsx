@@ -70,8 +70,8 @@ const PasswordResetForm = () => {
     };
 
     return (
-        <Box sx={{ backgroundColor: "#2f3543", height: "870px" }}>
-            <Container component="main" maxWidth="md" sx={{ pt: "60px" }} >
+        <Box sx={{ backgroundColor: "#2f3543", height: "930px" }}>
+            <Container component="main" maxWidth="md" sx={{ pt: "200px", }} >
                 <CssBaseline />
                 <Box sx={{ width: '100%', border: "2px solid black", p: "20px", borderRadius: "20px", backgroundColor: "white" }}>
                     <Stepper activeStep={activeStep}>
