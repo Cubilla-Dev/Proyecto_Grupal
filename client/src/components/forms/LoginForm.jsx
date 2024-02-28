@@ -48,7 +48,9 @@ const LoginForm = () => {
             dispatch(setUser(result.user));
             Swal.fire({
                 title: [`Bienvenido ${data.email}`],
-                icon: "success"
+                icon: "success",
+                confirmButtonColor: "#34473a",
+                iconColor: "#42826c"
             });
             setTimeout(() => {
                 router.push("/");

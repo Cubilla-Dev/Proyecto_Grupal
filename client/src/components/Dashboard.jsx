@@ -47,13 +47,21 @@ const Home = ({ handleDrawerClose }) => {
         setOpen(false);
         handleDrawerClose;
     };
-    const data = [
-        { name: 'Enero', ingresos: 4000, egresos: 2000 },
-        { name: 'Febrero', ingresos: 3000, egresos: 1500 },
-        { name: 'Marzo', ingresos: 5000, egresos: 3000 },
-        { name: 'Abril', ingresos: 4500, egresos: 2800 },
-        { name: 'Mayo', ingresos: 6000, egresos: 3500 },
-        { name: 'Junio', ingresos: 5500, egresos: 3200 },
+    const dataIngresos = [
+        { name: 'Enero', Ingresos: 4000, },
+        { name: 'Febrero', Ingresos: 3000, },
+        { name: 'Marzo', Ingresos: 5000, },
+        { name: 'Abril', Ingresos: 4500, },
+        { name: 'Mayo', Ingresos: 6000, },
+        { name: 'Junio', Ingresos: 5500, },
+    ];
+    const dataEgresos = [
+        { name: 'Enero', Pagos: 2000, },
+        { name: 'Febrero', Pagos: 1000, },
+        { name: 'Marzo', Pagos: 6500, },
+        { name: 'Abril', Pagos: 7500, },
+        { name: 'Mayo', Pagos: 2000, },
+        { name: 'Junio', Pagos: 4500, },
     ];
     return (
         <Box>
@@ -166,17 +174,28 @@ const Home = ({ handleDrawerClose }) => {
                         alignItems="center"
                         p="0 30px"
                         rowGap="50px"
+                        pt="30px"
+                        pb="30px"
                     >
-                        <h1>Gráficos</h1>
                         <ResponsiveContainer width="100%" height={300}>
-                            <LineChart data={data}>
+                            <LineChart data={dataIngresos}>
                                 <CartesianGrid strokeDasharray="3 3" />
                                 <XAxis dataKey="name" />
                                 <YAxis />
                                 <Tooltip />
                                 <Legend />
-                                <Line type="monotone" dataKey="ingresos" stroke="#8884d8" />
-                                <Line type="monotone" dataKey="egresos" stroke="#82ca9d" />
+                                <Line type="natural" dataKey="Ingresos" stroke="green" />
+
+                            </LineChart>
+                        </ResponsiveContainer>
+                        <ResponsiveContainer width="100%" height={300}>
+                            <LineChart data={dataEgresos}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="name" />
+                                <YAxis />
+                                <Tooltip />
+                                <Legend />
+                                <Line type="natural" dataKey="Pagos" stroke="red" />
                             </LineChart>
                         </ResponsiveContainer>
                     </Stack>

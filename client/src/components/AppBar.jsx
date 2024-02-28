@@ -90,7 +90,8 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
             dispatch(clearUser());
             Swal.fire({
                 title: "Logout Successful",
-
+                confirmButtonColor: "#34473a",
+                iconColor: "#42826c",
                 icon: "success"
             });
             setTimeout(() => {

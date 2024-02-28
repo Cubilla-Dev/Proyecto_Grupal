@@ -40,7 +40,9 @@ const RegisterForm = () => {
             Swal.fire({
                 title: "Good job!",
                 text: [`Bienvenido ${data.firstName}`],
-                icon: "success"
+                icon: "success",
+                confirmButtonColor: "#34473a",
+                iconColor: "#42826c",
             });
             setTimeout(() => {
                 router.push("/login")
