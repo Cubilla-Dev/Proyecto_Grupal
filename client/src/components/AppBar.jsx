@@ -26,10 +26,14 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import SendMoneyForm from './modals/sendMoneyInterception';
 import ChargeWalletForm from './modals/chargeWallet';
 import Swal from 'sweetalert2'
+import { useCookies } from "next-client-cookies";
+import AppContext from '@/app/AppContext';
+
+import Link from 'next/link';
 
 
 const drawerWidth = 260;
@@ -56,10 +60,12 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
+    const context=useContext(AppContext)
     const theme = useTheme();
     const isLogged = useAppSelector(selectLogged);
     const dispatch = useAppDispatch();
     const router = useRouter()
+    const cookies = useCookies();
     const [openModal, setOpenModal] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const [isOpen2, setIsOpen2] = useState(false);
@@ -101,6 +107,11 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
         }
     }
 
+    const handleFormSubmit = () => {
+        //console.log('reload');
+       // window.location.reload() ////COMENTAR PARA NO RECARGAR
+        context.setStateContext(true)
+      };
 
     const handleLogout = async () => {
         try {
@@ -145,15 +156,16 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
                         >
                             <MenuIcon />
                         </IconButton>
-                        <Stack direction="row" spacing={130}>
+                        <Stack direction="row" spacing={80}>
                             <Typography variant="h6" noWrap component="div">
                                 <img
                                     height="70px"
                                     src="https://z5vdccfn-8000.brs.devtunnels.ms/images/image-6.png"
                                     alt="logo"
                                 />
-                            </Typography>
 
+                            </Typography>
+                            <Button color='inherit'><Link style={{textDecoration:"none", color:"inherit"}} href={"/"} > Home</Link></Button>
                             {
                                 !isLogged ?
                                     <Button onClick={handleRedirect("/login")} color='inherit'>Login</Button>
@@ -161,6 +173,7 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
 
                                     <Button onClick={handleLogout} color='inherit'>Logout</Button>
                             }
+
                         </Stack>
 
                     </Toolbar>
@@ -243,29 +256,8 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
                         ))}
                     </List>
                     <Stack mt="200px" justifyContent="center" direction="row" >
-                        <Button onClick={handleOpenChat} variant='contained' sx={{ backgroundColor: "rgb(66 130 108)", ":hover": { backgroundColor: "#34473a" } }}>Contact Us <PhoneForwardedOutlinedIcon /></Button>
-                        <Modal
-                            open={openModalChat}
-                            onClose={handleCloseChat}
-                            aria-labelledby="modal-modal-title"
-                            aria-describedby="modal-modal-description"
-                            
-                        >
-                            <Box sx={{
-                                position: 'absolute',
-                                top: '50%',
-                                left: '50%',
-                                transform: 'translate(-50%, -50%)',
-                                width: 400,
-                                bgcolor: 'background.paper',
-                                boxShadow: 24,
-                                p: 4,
-                            }}>
-                                <h2 id="modal-modal-title">Contenido del Modal</h2>
-                                <p id="modal-modal-description"> Aquí puedes poner cualquier contenido que desees mostrar dentro del modal.</p>
-                                <Button onClick={handleCloseChat}>Cerrar</Button>
-                            </Box>
-                        </Modal>
+                        <Link href={"/chat"}>   <Button variant='contained' sx={{ backgroundColor: "rgb(66 130 108)", ":hover": { backgroundColor: "#34473a" } }}>Chatea con Amigos! <PhoneForwardedOutlinedIcon /></Button> </Link>
+
                     </Stack>
                 </Drawer>
             </Box>
@@ -311,10 +303,12 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
             <SendMoneyForm
                 isDialogOpened={isOpen}
                 handleCloseDialog={() => setIsOpen(false)}
+                onFormSubmit={handleFormSubmit}
             />
             <ChargeWalletForm
                 isDialogOpened={isOpen3}
                 handleCloseDialog={() => setIsOpen3(false)}
+                onFormSubmit={handleFormSubmit}
             />
         </>
     );

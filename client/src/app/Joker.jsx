@@ -1,19 +1,16 @@
 "use client";
 import React, { useState } from "react";
-import Dashboard from "../components/Dashboard";
 import { createContext } from "react";
 import AppContext from "./AppContext";
-const Home = () => {
+const Joker = ({children}) => {
   const [stateContext, setStateContext] = useState(false);
   return (
     <>
       <AppContext.Provider value={{ stateContext, setStateContext }}>
-        <div>
-          <Dashboard />
-        </div>
+        {children}
       </AppContext.Provider>
     </>
   );
 };
 
-export default Home;
+export default Joker;

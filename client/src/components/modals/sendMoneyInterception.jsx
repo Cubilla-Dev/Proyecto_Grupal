@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -10,9 +10,12 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { useRouter } from "next/navigation";
 import { useCookies } from "next-client-cookies";
 import { sendMoney } from "@/app/api/route";
+import AppContext from "@/app/AppContext";
 
-const SendMoneyForm = ({ isDialogOpened, handleCloseDialog }) => {
+
+const SendMoneyForm = ({ isDialogOpened, handleCloseDialog,onFormSubmit }) => {
   const [id, setId] = useState(undefined);
+  const context=useContext(AppContext)
   const router = useRouter();
   const cookies = useCookies();
   useEffect(() => {
@@ -39,6 +42,8 @@ const SendMoneyForm = ({ isDialogOpened, handleCloseDialog }) => {
     try {
       const result = await sendMoney(formJson);
       handleClose();
+      onFormSubmit();
+      context.setStateContext(true)
     } catch (error) {
       console.log(error);
     }
