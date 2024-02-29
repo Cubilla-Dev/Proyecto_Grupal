@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Box, Paper, Stack } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import AppBarComponent from "@/components/AppBar";
@@ -7,6 +7,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { DataGrid } from '@mui/x-data-grid';
 import { useCookies } from 'next-client-cookies';
 import { getUserHistoryTranf } from "../api/route";
+import AppContext from '@/app/AppContext';
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
   ({ theme, open }) => ({
@@ -20,11 +21,13 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
   })
 );
 
+
 const PaymentsPage = ({ handleDrawerClose }) => {
   const [open, setOpen] = useState(false);
   const [historyTranf, setHistoryTranf]=useState([])
   const cookies = useCookies();
-
+  const context=useContext(AppContext)
+  console.log( context.stateContext);
 
   useEffect(() => {
     const cookieInfo = cookies.get("info");
@@ -40,14 +43,14 @@ const PaymentsPage = ({ handleDrawerClose }) => {
                     createdAt: new Date(item.createdAt).toLocaleString(),
                     numero_cuenta: item.cuenta_destinatario,
                 })));
-                
+                context.setStateContext(false)
             }
         } catch (error) {
             console.error(error);
         }
     };
     fetchData();
-}, []);
+}, [ context.stateContext]);
 
   const handleDrawerOpen = () => {
     setOpen(true);
