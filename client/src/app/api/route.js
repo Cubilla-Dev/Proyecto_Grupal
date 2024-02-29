@@ -241,6 +241,23 @@ export function getUserHistoryTranf(userId) {
   });
 }
 
+//obtener el historial de servicio
+export function getUserHistoryTranfServicio(userId) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_DOMAIN}/servicio/history/${userId}`,
+        { withCredentials: true }
+      );
+      const result = await response.data;
+      resolve(result);
+    } catch (error) {
+      console.log(error);
+      reject(error);
+    }
+  });
+}
+
 //actualizar wallet
 export function updateUserWallet(data) {
     console.log(data.wallet);

@@ -37,8 +37,8 @@ app.use("/api/user", userRoutes);
 const sendMoneyRoutes=require('./routes/sendMoney.routes')
 app.use("/api/send",sendMoneyRoutes)
 
-// const transfRoutes = require('./routes/transf.cuentas.routes')
-// app.use('/api/user', transfRoutes)
+const routerServicio = require('./routes/servicio.routes')
+app.use('/api/servicio', routerServicio)
 
 // const routerCuenta = require('./routes/sendMoney.routes')
 // app.use('/api/crear-cuenta', routerCuenta)

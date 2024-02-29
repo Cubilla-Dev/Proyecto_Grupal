@@ -7,8 +7,7 @@ import AccountBalanceOutlinedIcon from '@mui/icons-material/AccountBalanceOutlin
 import CssBaseline from '@mui/material/CssBaseline';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { useCookies } from 'next-client-cookies';
-import { getUserWallet, getUserHistoryTranf } from '@/app/api/route';
-
+import { getUserWallet, getUserHistoryTranf, getUserHistoryTranfServicio } from '@/app/api/route';
 
 
 
@@ -28,6 +27,8 @@ const Home = ({ handleDrawerClose }) => {
     const [efectivo,setEfectivo]=useState(undefined)
     const [id,setId]=useState(undefined)
     const [historyTranf, setHistoryTranf]=useState([])
+    const [historyTranfServicio, setHistoryTranfServicio]=useState([])
+
     const cookies = useCookies();
 
     useEffect(() => {
@@ -37,9 +38,11 @@ const Home = ({ handleDrawerClose }) => {
             try {
                 if (cookieInfo) {
                     const resultHistory = await getUserHistoryTranf(cookieInfo);
+                    const resultHistoryServicio = await getUserHistoryTranfServicio(cookieInfo);
                     const result = await getUserWallet(cookieInfo);
                    // console.log("Saldo de la billetera:", result.walletBalance);
                     setHistoryTranf(resultHistory.data)
+                    setHistoryTranfServicio(resultHistoryServicio.data)
                     setEfectivo(result.walletBalance)
                     setId(cookieInfo)
                 }
@@ -50,8 +53,6 @@ const Home = ({ handleDrawerClose }) => {
         fetchData();
     }, [cookies, efectivo]);
 
-    //TODO: Console log de historial para que no se pierda
-    console.log('el historial de datos es ', historyTranf)
 
     const [open, setOpen] = useState(false);
 
@@ -59,17 +60,17 @@ const Home = ({ handleDrawerClose }) => {
         setOpen(true);
     };
 
-    const payments = [
-        { imageSrc: '/alexSa.png', amount: '$100', date: '2024-02-24', company: "Alex S.A" },
-        { imageSrc: '/bristol.jpg', amount: '$50', date: '2024-02-23', company: "Bristol s.A" },
-        { imageSrc: '/tigo.png', amount: '$200', date: '2024-02-22', company: "Tigo S.a" }
-    ];
+    // const payments = [
+    //     { imageSrc: '/alexSa.png', amount: '$100', date: '2024-02-24', company: "Alex S.A" },
+    //     { imageSrc: '/bristol.jpg', amount: '$50', date: '2024-02-23', company: "Bristol s.A" },
+    //     { imageSrc: '/tigo.png', amount: '$200', date: '2024-02-22', company: "Tigo S.a" }
+    // ];
 
-    const movements = [
-        { icon: <AccountBalanceOutlinedIcon fontSize='large' />, amount: '+ $155', date: '2024-02-24', user: "Brian Vera" },
-        { icon: <AccountBalanceOutlinedIcon fontSize='large' />, amount: '+ $350', date: '2024-02-23', user: "Gustavo Cubilla" },
-        { icon: <AccountBalanceOutlinedIcon fontSize='large' />, amount: '- $400', date: '2024-02-22', user: "Carlos Ibarra" }
-    ];
+    // const movements = [
+    //     { icon: <AccountBalanceOutlinedIcon fontSize='large' />, amount: '+ $155', date: '2024-02-24', user: "Brian Vera" },
+    //     { icon: <AccountBalanceOutlinedIcon fontSize='large' />, amount: '+ $350', date: '2024-02-23', user: "Gustavo Cubilla" },
+    //     { icon: <AccountBalanceOutlinedIcon fontSize='large' />, amount: '- $400', date: '2024-02-22', user: "Carlos Ibarra" }
+    // ];
 
     const handleCloseDrawer = () => {
         setOpen(false);
@@ -141,7 +142,7 @@ const Home = ({ handleDrawerClose }) => {
                                     }}
 
                                 >
-                                    <h2>Pagos Recientes</h2>
+                                    <h2>Pagos de Servicios</h2>
                                     <Table
                                         sx={{
                                             display: "flex",
@@ -152,12 +153,12 @@ const Home = ({ handleDrawerClose }) => {
                                             flexDirection: "column",
 
                                         }}   >
-                                            {movements.map((payments, idx) => (
+                                            {historyTranfServicio.map((servicio, idx) => (
                                                 <TableRow key={idx} >
-                                                    <TableCell sx={{ width: "130px" }} ><img width="40px" style={{ borderRadius: "50%" }} src={payments.imageSrc} /></TableCell>
-                                                    <TableCell sx={{ width: "130px" }} > {payments.company}</TableCell>
-                                                    <TableCell sx={{ color: "red", width: "130px" }} >-{payments.amount}</TableCell>
-                                                    <TableCell  >{payments.date}</TableCell>
+                                                    <TableCell sx={{ width: "130px" }} ><img width="40px" style={{ borderRadius: "50%" }} src={servicio.imageSrc} /></TableCell>
+                                                    <TableCell sx={{ width: "130px" }} > {servicio.nbr_completo_destina}</TableCell>
+                                                    <TableCell sx={{ color: "red", width: "130px" }} >-{servicio.monto}</TableCell>
+                                                    <TableCell  >{servicio.createdAt}</TableCell>
                                                 </TableRow>
                                             ))}
                                         </TableBody>
@@ -184,6 +185,7 @@ const Home = ({ handleDrawerClose }) => {
                                     >
                                         <TableBody>
                                             {historyTranf.map((history, idx) => (
+                                                
                                                 <TableRow key={idx} >
                                                     <TableCell sx={{ color: "green", width: "130px" }}><AccountBalanceOutlinedIcon fontSize='large' />
                                                     </TableCell>
