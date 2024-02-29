@@ -26,10 +26,13 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import SendMoneyForm from './modals/sendMoneyInterception';
 import ChargeWalletForm from './modals/chargeWallet';
 import Swal from 'sweetalert2'
+import { useCookies } from "next-client-cookies";
+import AppContext from '@/app/AppContext';
+
 
 
 const drawerWidth = 260;
@@ -56,10 +59,12 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
+    const context=useContext(AppContext)
     const theme = useTheme();
     const isLogged = useAppSelector(selectLogged);
     const dispatch = useAppDispatch();
     const router = useRouter()
+    const cookies = useCookies();
     const [openModal, setOpenModal] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const [isOpen2, setIsOpen2] = useState(false);
@@ -101,6 +106,11 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
         }
     }
 
+    const handleFormSubmit = () => {
+        //console.log('reload');
+       // window.location.reload() ////COMENTAR PARA NO RECARGAR
+        context.setStateContext(true)
+      };
 
     const handleLogout = async () => {
         try {
@@ -311,10 +321,12 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
             <SendMoneyForm
                 isDialogOpened={isOpen}
                 handleCloseDialog={() => setIsOpen(false)}
+                onFormSubmit={handleFormSubmit}
             />
             <ChargeWalletForm
                 isDialogOpened={isOpen3}
                 handleCloseDialog={() => setIsOpen3(false)}
+                onFormSubmit={handleFormSubmit}
             />
         </>
     );

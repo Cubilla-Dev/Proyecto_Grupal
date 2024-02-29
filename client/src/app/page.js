@@ -1,10 +1,19 @@
-import React from 'react'
-import Dashboard from '../components/Dashboard'
-
+"use client";
+import React, { useState } from "react";
+import Dashboard from "../components/Dashboard";
+import { createContext } from "react";
+import AppContext from "./AppContext";
 const Home = () => {
-    return (
-        <div><Dashboard /></div>
-    )
-}
+  const [stateContext, setStateContext] = useState(false);
+  return (
+    <>
+      <AppContext.Provider value={{ stateContext, setStateContext }}>
+        <div>
+          <Dashboard />
+        </div>
+      </AppContext.Provider>
+    </>
+  );
+};
 
-export default Home
+export default Home;

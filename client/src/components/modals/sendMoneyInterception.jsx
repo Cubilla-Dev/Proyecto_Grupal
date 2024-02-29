@@ -11,8 +11,10 @@ import { useRouter } from "next/navigation";
 import { useCookies } from "next-client-cookies";
 import { sendMoney } from "@/app/api/route";
 
-const SendMoneyForm = ({ isDialogOpened, handleCloseDialog }) => {
+
+const SendMoneyForm = ({ isDialogOpened, handleCloseDialog,onFormSubmit }) => {
   const [id, setId] = useState(undefined);
+
   const router = useRouter();
   const cookies = useCookies();
   useEffect(() => {
@@ -39,6 +41,7 @@ const SendMoneyForm = ({ isDialogOpened, handleCloseDialog }) => {
     try {
       const result = await sendMoney(formJson);
       handleClose();
+      onFormSubmit();
     } catch (error) {
       console.log(error);
     }

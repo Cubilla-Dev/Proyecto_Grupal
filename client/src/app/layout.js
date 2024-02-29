@@ -3,7 +3,6 @@ import "./globals.css";
 import AppBarComponent from "../components/AppBar";
 import { CookiesProvider } from 'next-client-cookies/server';
 import StoreProvider from "./StoreProvider";
-
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {

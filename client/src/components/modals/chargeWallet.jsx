@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 import { useCookies } from "next-client-cookies";
 import { sendMoney, updateUserWallet } from "@/app/api/route";
 
-const ChargeWalletForm = ({ isDialogOpened, handleCloseDialog }) => {
+const ChargeWalletForm = ({ isDialogOpened, handleCloseDialog,onFormSubmit }) => {
   const [id, setId] = useState(undefined);
   const router = useRouter();
   const cookies = useCookies();
@@ -34,6 +34,7 @@ const ChargeWalletForm = ({ isDialogOpened, handleCloseDialog }) => {
     try {
       const result = await updateUserWallet(formJson);
       handleClose();
+      onFormSubmit();
       console.log("enviado");
     } catch (error) {
       console.log(error);
