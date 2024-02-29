@@ -53,35 +53,40 @@ UserSchema.virtual("confirmPassword")
   .get(() => this._confirmPassword)
   .set((value) => (this._confirmPassword = value));
 
-UserSchema.pre("validate", function (next) {
-  if (this.password !== this.confirmPassword) {
-    this.invalidate("confirmPassword", "Password must match confirm password");
-  }
-  next();
+  UserSchema.pre("validate", function (next) {
+    if (this.isModified("password") && this.password !== this.confirmPassword) {
+        this.invalidate("confirmPassword", "Password must match confirm password");
+    }
+    next();
 });
 
+  
+
 UserSchema.pre("save", function (next) {
-  this.role = "user";
-  bcrypt.hash(this.password, 10).then((hash) => {
-    this.password = hash;
-    next();
-  });
+  if (this.isModified("password")) {
+      bcrypt.hash(this.password, 10).then((hash) => {
+          this.password = hash;
+          next();
+      });
+  } else {
+      next();
+  }
 });
 
 UserSchema.pre(["findOneAndUpdate"], async function (next) {
-  const data = this.getUpdate();
+  const data = this._update;
   if (data.password) {
-    try {
-      const salt = await bcrypt.genSalt(10);
-      const hash = await bcrypt.hash(data.password, salt);
-      data.password = hash;
-      next();
-    } catch (error) {
-      next(error);
-    }
+      try {
+          const salt = await bcrypt.genSalt(10);
+          const hash = await bcrypt.hash(data.password, salt);
+          data.password = hash;
+      } catch (error) {
+          return next(error);
+      }
   }
   next();
 });
+
 
 const User = new mongoose.model("User", UserSchema);
 

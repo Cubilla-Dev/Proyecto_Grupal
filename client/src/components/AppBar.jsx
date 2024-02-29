@@ -228,7 +228,7 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
                             >
                                 <ListItemButton
                                     component="a"
-                                    href={index === 0 ? "/" : index === 1 ? "/movementsPage" : index === 2 ? "/paymentsPage" : undefined}
+                                    href={index === 0 ? "/" : index === 1 ? "/paymentsPage " : index === 2 ? "/movementsPage" : undefined}
                                     onClick={() => index === 3 && handleClickOpen()}
                                     onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'rgb(66 130 108)'}
                                     onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#ffffff'}

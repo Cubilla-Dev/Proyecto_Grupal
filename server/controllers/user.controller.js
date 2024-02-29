@@ -95,8 +95,7 @@ module.exports.findWallet = async (req, res) => {
         const user = await User.findOne({ _id: id });
         if (user) {
             user.wallet += wallet;
-            await user.save();
-
+            await user.save(['wallet']); 
             res.status(200).json({ walletBalance: user.wallet });
         } else {
             res.status(404).json({ error: 'User not found' });
@@ -106,6 +105,7 @@ module.exports.findWallet = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
 
 /* METODOS DE SESSION */
 
