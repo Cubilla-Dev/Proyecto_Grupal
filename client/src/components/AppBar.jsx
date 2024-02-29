@@ -101,6 +101,7 @@ const AppBarComponent = ({ open, handleDrawerClose, handleDrawerOpen }) => {
             setIsOpen(!isOpen);
         } else if (aux === 2) {
             console.log("pago");
+            setIsOpen2(!isOpen2)
         } else {
             console.log("cargar");
             setIsOpen3(!isOpen3);

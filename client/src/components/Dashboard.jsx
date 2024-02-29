@@ -6,7 +6,7 @@ import AppBarComponent from '../components/AppBar';
 import AccountBalanceOutlinedIcon from '@mui/icons-material/AccountBalanceOutlined';
 import CssBaseline from '@mui/material/CssBaseline';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from 'recharts'; // Importa los componentes necesarios para el gráfico de barrasimport { useCookies } from 'next-client-cookies';
-import { getUserWallet, getUserHistoryTranf } from '@/app/api/route';
+import { getUserWallet, getUserHistoryTranf, getUserHistoryTranfServicio } from '@/app/api/route';
 import AppContext from '@/app/AppContext';
 import { useCookies } from 'next-client-cookies';
 
@@ -32,6 +32,7 @@ const Home = ({ handleDrawerClose }) => {
     const [efectivo, setEfectivo] = useState(undefined)
     const [id, setId] = useState(undefined)
     const [historyTranf, setHistoryTranf] = useState([])
+    const [historyTranfServicio, setHistoryTranfServicio] = useState([])
     const cookies = useCookies();
 
     useEffect(() => {
