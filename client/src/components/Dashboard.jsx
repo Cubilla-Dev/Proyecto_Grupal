@@ -7,6 +7,8 @@ import AccountBalanceOutlinedIcon from '@mui/icons-material/AccountBalanceOutlin
 import CssBaseline from '@mui/material/CssBaseline';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from 'recharts'; // Importa los componentes necesarios para el gráfico de barrasimport { useCookies } from 'next-client-cookies';
 import { getUserWallet, getUserHistoryTranf } from '@/app/api/route';
+import AppContext from '@/app/AppContext';
+import { useCookies } from 'next-client-cookies';
 
 
 
@@ -22,9 +24,9 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({
 }))
 
 const Home = ({ handleDrawerClose }) => {
-    //actualizar datos en submit
-const context=useContext(AppContext)
-console.log(context);
+    //actualizar datos despues de un submit
+    const context=useContext(AppContext)
+    console.log(context);
 
     //obtener dinero en cuenta
     const [efectivo, setEfectivo] = useState(undefined)
