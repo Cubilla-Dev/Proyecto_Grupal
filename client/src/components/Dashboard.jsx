@@ -5,10 +5,9 @@ import { styled } from '@mui/material/styles';
 import AppBarComponent from '../components/AppBar';
 import AccountBalanceOutlinedIcon from '@mui/icons-material/AccountBalanceOutlined';
 import CssBaseline from '@mui/material/CssBaseline';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { useCookies } from 'next-client-cookies';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from 'recharts'; // Importa los componentes necesarios para el gráfico de barrasimport { useCookies } from 'next-client-cookies';
 import { getUserWallet, getUserHistoryTranf } from '@/app/api/route';
-import AppContext from '@/app/AppContext';
+
 
 
 
@@ -28,9 +27,9 @@ const context=useContext(AppContext)
 console.log(context);
 
     //obtener dinero en cuenta
-    const [efectivo,setEfectivo]=useState(undefined)
-    const [id,setId]=useState(undefined)
-    const [historyTranf, setHistoryTranf]=useState([])
+    const [efectivo, setEfectivo] = useState(undefined)
+    const [id, setId] = useState(undefined)
+    const [historyTranf, setHistoryTranf] = useState([])
     const cookies = useCookies();
 
     useEffect(() => {
@@ -41,7 +40,7 @@ console.log(context);
                 if (cookieInfo) {
                     const resultHistory = await getUserHistoryTranf(cookieInfo);
                     const result = await getUserWallet(cookieInfo);
-                   // console.log("Saldo de la billetera:", result.walletBalance);
+                    // console.log("Saldo de la billetera:", result.walletBalance);
                     setHistoryTranf(resultHistory.data)
                     setEfectivo(result.walletBalance)
                     setId(cookieInfo)
@@ -117,7 +116,7 @@ console.log(context);
                 >
                     <Stack width="70%"  >
                         <Stack spacing={3} direction="column" >
-                        
+
                             <Stack spacing={3} direction="column">
                                 <Stack
                                     borderRadius="30px"
@@ -132,7 +131,7 @@ console.log(context);
                                     <h4>Numero de Cuenta: {id}</h4>
                                 </Stack>
                             </Stack>
-                     
+
                             <Stack direction="row" spacing={3}>
 
                                 <TableContainer
@@ -204,7 +203,7 @@ console.log(context);
                                 </TableContainer>
                             </Stack>
                         </Stack>
-                    </Stack >
+                    </Stack >                       
                     <Stack
                         component={Paper}
                         width="30%"
@@ -215,28 +214,29 @@ console.log(context);
                         pt="30px"
                         pb="30px"
                     >
+                        <h1>Gráfico de Transferencias</h1>
                         <ResponsiveContainer width="100%" height={300}>
-                            <LineChart data={dataIngresos}>
+                            <BarChart
+                                width={500}
+                                height={300}
+                                data={historyTranf}
+                                margin={{
+                                    top: 5,
+                                    right: 30,
+                                    left: 20,
+                                    bottom: 5,
+                                }}
+                            >
                                 <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="name" />
+                                <XAxis dataKey="date" />
                                 <YAxis />
                                 <Tooltip />
                                 <Legend />
-                                <Line type="natural" dataKey="Ingresos" stroke="green" />
-
-                            </LineChart>
-                        </ResponsiveContainer>
-                        <ResponsiveContainer width="100%" height={300}>
-                            <LineChart data={dataEgresos}>
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="name" />
-                                <YAxis />
-                                <Tooltip />
-                                <Legend />
-                                <Line type="natural" dataKey="Pagos" stroke="red" />
-                            </LineChart>
+                                <Bar dataKey="monto" fill="#8884d8" />
+                            </BarChart>
                         </ResponsiveContainer>
                     </Stack>
+
                 </Stack>
             </Main>
         </Box>
