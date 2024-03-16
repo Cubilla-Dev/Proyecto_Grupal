@@ -32,6 +32,8 @@ const Home = ({ handleDrawerClose }) => {
     const [efectivo, setEfectivo] = useState(undefined)
     const [id, setId] = useState(undefined)
     const [historyTranf, setHistoryTranf] = useState([])
+    const [historyTranfServicio, setHistoryTranfServicio] = useState([]); // Paso 1: Agregar estado para historyTranfServicio
+
     const cookies = useCookies();
 
     useEffect(() => {
@@ -46,6 +48,7 @@ const Home = ({ handleDrawerClose }) => {
                     // console.log("Saldo de la billetera:", result.walletBalance);
                     setHistoryTranf(resultHistory.data)
                     setHistoryTranfServicio(resultHistoryServicio.data)
+                    setHistoryTranfServicio(resultHistoryServicio.data); // Paso 2: Actualizar el estado de historyTranfServicio con los datos obtenidos
                     setEfectivo(result.walletBalance)
                     setId(cookieInfo)
                     context.setStateContext(false)
